@@ -22,12 +22,18 @@
     <ClInclude Include="gpuOpsAPI.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gpuMat.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="gpuOpsAPI.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

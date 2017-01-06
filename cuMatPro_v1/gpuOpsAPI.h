@@ -95,7 +95,7 @@ Call the following function like
 template <typename T1, typename T2, typename T3>
 void MatMul(T1* A, T2* B, T3* C, int m, int n, int k)
 {
-	const int L = max(m, n) > 16 ? 16 : max(m, n);
+	const int L = min(max(m, n), 32);
 	dim3 threadsPerBlock(L, L);
 	dim3 numBlocks(ceil((double)m / L), ceil((double)n / L));
 

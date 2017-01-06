@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-#define pn(x) printf("%5.0f", (double)x)
+#define pn(x) printf("%5.2f ", (double)x)
 
 using namespace std;
 

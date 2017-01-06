@@ -5,15 +5,17 @@
 #include <iostream>
 #include "gpuMat.h"
 #include "gpuOpsAPI.h"
+#include "Timer.h"
 
-#define pn(x) printf("%5.0f", (double)x)
 #define min(x, y) ((x)<(y)?(x):(y))
 
 using namespace std;
 
+Timer timer1;
+
 int main()
 {
-	int S = 4;
+	int S = 20;
 	gpuMat<float> Y(S, S);
 	gpuMat<bool> B(S, S);
 	gpuMat<double> C(S, S);
@@ -47,21 +49,26 @@ int main()
 
 
 	// Test functions for rectangular matrices
-	gpuMat<double> mat1(4, 5);
-	gpuMat<double> vec1(5, 1);
-	gpuMat<double> result(4, 1);
+	int m = 32768, n = 256, k = 128;
+	gpuMat<float> mat1(m, k);
+	gpuMat<float> vec1(k, n);
+	gpuMat<float> result(m, n);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < m; i++)
 	{
-		for (int j = 0; j < 5; j++)
+		for (int j = 0; j < k; j++)
 		{
-			mat1(i, j) = ((i + 1)%(j + 1));
+			//mat1(i, j) = ((i + 1)%(j + 1));
+			mat1(i, j) = (float)rand() / RAND_MAX - 0.5;
 		}
 	}
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < k; i++)
 	{
-		vec1(i) = 1;
+		for (int j = 0; j < n; j++)
+		{
+			vec1(i, j) = (float)rand() / RAND_MAX - 0.5;
+		}
 	}
 	
 	mat1.print();
@@ -70,8 +77,74 @@ int main()
 	mat1.copy2Device();
 	vec1.copy2Device();
 
-	MatMul<double, double, double>(mat1.d_elems, vec1.d_elems, result.d_elems, 4, 1, 5);
+	cout << "Using my API." << endl;
+	{
+		cudaEvent_t start, stop;
+		float elapsedTime;
+
+		cudaEventCreate(&start);
+		cudaEventRecord(start, 0);
+
+		//Do kernel activity here
+		MatMul<float, float, float>(mat1.d_elems, vec1.d_elems, result.d_elems, m, n, k);
+
+		cudaEventCreate(&stop);
+		cudaEventRecord(stop, 0);
+		cudaEventSynchronize(stop);
+
+		cudaEventElapsedTime(&elapsedTime, start, stop);
+		printf("Elapsed time : %f ms\n", elapsedTime);
+	}
+
+	
 	result.copy2Host();
 	
 	result.print();
+
+	cout << "Using CUBLAS" << endl;
+	float al = 1;
+	float bet = 0;
+	cublasHandle_t handle;
+	cublasCreate(&handle);
+
+	{
+		cudaEvent_t start, stop;
+		float elapsedTime;
+
+		cudaEventCreate(&start);
+		cudaEventRecord(start, 0);
+
+		//Do kernel activity here
+		cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &al, mat1.d_elems, m, vec1.d_elems, k, &bet, result.d_elems, m);
+
+		cudaEventCreate(&stop);
+		cudaEventRecord(stop, 0);
+		cudaEventSynchronize(stop);
+
+		cudaEventElapsedTime(&elapsedTime, start, stop);
+		printf("Elapsed time : %f ms\n", elapsedTime);
+	}
+	result.copy2Host();
+
+	result.print();
+
+	/*cout << "Calculating in host CPU | Single thread" << endl;
+	{
+		timer1.start();
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				double cvalue = 0;
+				for (int l = 0; l < k; l++)
+				{
+					cvalue += mat1(i, l)*vec1(l, j);
+				}
+				result(i, j) = cvalue;
+			}
+		}
+		timer1.stop();
+	}
+
+	result.print();*/
 }
