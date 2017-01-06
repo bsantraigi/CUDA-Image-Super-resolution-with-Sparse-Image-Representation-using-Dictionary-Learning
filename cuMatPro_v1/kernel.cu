@@ -7,15 +7,15 @@
 #include "gpuOpsAPI.h"
 
 #define pn(x) printf("%5.0f", (double)x)
-#define min(x, y) (x)<(y)?(x):(y)
+#define min(x, y) ((x)<(y)?(x):(y))
 
 using namespace std;
 
 int main()
 {
-	int S = 5;
+	int S = 4;
 	gpuMat<float> Y(S, S);
-	gpuMat<int> B(S, S);
+	gpuMat<bool> B(S, S);
 	gpuMat<double> C(S, S);
 	cout << Y.cols << "by" << Y.rows << endl;
 
@@ -24,34 +24,14 @@ int main()
 		for (int j = 0; j < S; j++)
 		{
 			Y(i, j) = i*Y.cols + j;
-			B(i, j) = i>=j;
+			B(i, j) = (i>=j);
 		}
 	}
 	Y.copy2Device();
 	B.copy2Device();
 
-	
-
-	cout << endl;
-	for (int i = 0; i < min(10, S); i++)
-	{
-		for (int j = 0; j < min(10, S); j++)
-		{
-			pn(Y(i, j));
-		}
-		cout << endl;
-	}
-
-	cout << endl;
-	for (int i = 0; i < min(10, S); i++)
-	{
-		for (int j = 0; j < min(10, S); j++)
-		{
-			pn(B(i, j));
-
-		}
-		cout << endl;
-	}
+	Y.print();
+	B.print();
 
 	// CUBLAS TEST
 	/*float al = 1;
@@ -60,17 +40,38 @@ int main()
 	cublasCreate(&handle);
 	cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, S, S, S, &al, Y.d_elems, S, B.d_elems, S, &bet, C.d_elems, S);*/
 
-	Add<float, int, double>(Y.d_elems, B.d_elems, C.d_elems, S, S);
+	MatMul<float, bool, double>(Y.d_elems, B.d_elems, C.d_elems, S, S, S);
 
 	C.copy2Host();
+	C.print();
 
-	cout << endl;
-	for (int i = 0; i < min(10, S); i++)
+
+	// Test functions for rectangular matrices
+	gpuMat<double> mat1(4, 5);
+	gpuMat<double> vec1(5, 1);
+	gpuMat<double> result(4, 1);
+
+	for (int i = 0; i < 4; i++)
 	{
-		for (int j = 0; j < min(10, S); j++)
+		for (int j = 0; j < 5; j++)
 		{
-			pn(C(i, j));
+			mat1(i, j) = ((i + 1)%(j + 1));
 		}
-		cout << endl;
 	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		vec1(i) = 1;
+	}
+	
+	mat1.print();
+	vec1.print();
+
+	mat1.copy2Device();
+	vec1.copy2Device();
+
+	MatMul<double, double, double>(mat1.d_elems, vec1.d_elems, result.d_elems, 4, 1, 5);
+	result.copy2Host();
+	
+	result.print();
 }

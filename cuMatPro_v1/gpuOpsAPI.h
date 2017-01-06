@@ -82,7 +82,7 @@ __global__ void matmul_d(T1* A, T2* B, T3* C, int m, int n, int k)
 	if (r < m && c < n){
 		for (int i = 0; i < k; i++)
 		{
-			cvalue += A[k*m + r] + B[c*m + k];
+			cvalue += (T3)(A[i*m + r] * B[c*k + i]);
 		}
 		C[c*m + r] = cvalue;
 	}

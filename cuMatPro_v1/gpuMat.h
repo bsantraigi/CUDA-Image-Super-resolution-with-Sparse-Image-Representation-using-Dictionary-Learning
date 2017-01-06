@@ -5,6 +5,10 @@
 
 #include <iostream>
 
+#define pn(x) printf("%5.0f", (double)x)
+
+using namespace std;
+
 template <typename T>
 class gpuMat
 {
@@ -15,7 +19,8 @@ public:
 
 	gpuMat(int rows, int cols);
 	~gpuMat();
-	T& operator()(int row, int col);
+	T& operator()(int row, int col = 0);
+	void print();
 	void copy2Device();
 	void copy2Host();
 };
@@ -50,4 +55,18 @@ template <typename T>
 void gpuMat<T>::copy2Host()
 {
 	cudaMemcpy(h_elems, d_elems, rows*cols*sizeof(T), cudaMemcpyDeviceToHost);
+}
+
+template <typename T>
+void gpuMat<T>::print()
+{
+	cout << endl;
+	for (int i = 0; i < min(10, rows); i++)
+	{
+		for (int j = 0; j < min(10, cols); j++)
+		{
+			pn((*this)(i, j));
+		}
+		cout << endl;
+	}
 }
