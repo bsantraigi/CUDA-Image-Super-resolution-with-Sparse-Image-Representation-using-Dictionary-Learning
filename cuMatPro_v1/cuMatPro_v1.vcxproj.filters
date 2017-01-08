@@ -25,6 +25,18 @@
     <ClInclude Include="Timer.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="DLLayer_GPU.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImLoader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DLConfig.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gpuMat.cpp">
@@ -34,6 +46,18 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="DLLayer_GPU.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ImLoader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="DLConfig.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

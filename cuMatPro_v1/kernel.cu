@@ -6,6 +6,9 @@
 #include "gpuMat.h"
 #include "gpuOpsAPI.h"
 #include "Timer.h"
+#include "DLLayer_GPU.h"
+#include "ImLoader.h"
+#include "DLConfig.h"
 
 #define min(x, y) ((x)<(y)?(x):(y))
 
@@ -13,7 +16,7 @@ using namespace std;
 
 Timer timer1;
 
-int main()
+int test()
 {
 	int S = 20;
 	gpuMat<float> Y(S, S);
@@ -49,7 +52,7 @@ int main()
 
 
 	// Test functions for rectangular matrices
-	int m = 32768, n = 256, k = 128;
+	int m = 682768, n = 256, k = 128;
 	gpuMat<float> mat1(m, k);
 	gpuMat<float> vec1(k, n);
 	gpuMat<float> result(m, n);
@@ -96,7 +99,6 @@ int main()
 		printf("Elapsed time : %f ms\n", elapsedTime);
 	}
 
-	
 	result.copy2Host();
 	
 	result.print();
@@ -147,4 +149,39 @@ int main()
 	}
 
 	result.print();*/
+
+	return 0;
+}
+
+int calcN(int imsize, int patchsize, int imcount)
+{
+	return (imsize - patchsize + 1)*(imsize - patchsize + 1)*imcount;
+}
+
+int main(){
+	//test();
+	
+	int propImSize = 256;
+	int propPatchSize = 8;
+	int propImCount = 5;
+	int N = calcN(propImSize, propPatchSize, propImCount);
+	int M = propPatchSize*propPatchSize;
+	int K = 100;
+	cout << "M: " << M << ", N: " << N << ", K: " << K << endl;
+
+	ImLoader imloader(propImSize, propPatchSize);
+	gpuMat<double> Y(M, N);
+	imloader.GetDataMatrix(Y, propImCount);
+
+	DLConfig config1;
+	DLConfig *config1_d;
+	cudaMalloc(&config1_d, sizeof(DLConfig));
+	cudaMemcpy(config1_d, &config1, sizeof(DLConfig), cudaMemcpyHostToDevice);
+
+	gpuMat<double> D(M, K);
+	gpuMat<double> S(K, N);
+	gpuMat<bool> B(K, N);
+	gpuMat<double> PI(K, 1);
+	gpuMat<double> post_PI(K, N);
+
 }

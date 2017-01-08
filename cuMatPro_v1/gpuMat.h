@@ -17,13 +17,19 @@ public:
 	T* d_elems = nullptr;
 	int rows, cols;
 
+	gpuMat();
 	gpuMat(int rows, int cols);
 	~gpuMat();
 	T& operator()(int row, int col = 0);
-	void print();
+	void print(bool start = true);
 	void copy2Device();
 	void copy2Host();
 };
+
+template <typename T>
+gpuMat<T>::gpuMat()
+{	
+}
 
 template <typename T>
 gpuMat<T>::gpuMat(int rows, int cols)
@@ -37,6 +43,10 @@ gpuMat<T>::gpuMat(int rows, int cols)
 template <typename T>
 gpuMat<T>::~gpuMat()
 {
+	cout << "Destroying gpuMat[auto]" << endl;
+	delete[] h_elems;
+	cudaFree(d_elems);
+
 }
 
 template <typename T>
@@ -58,15 +68,28 @@ void gpuMat<T>::copy2Host()
 }
 
 template <typename T>
-void gpuMat<T>::print()
+void gpuMat<T>::print(bool start)
 {
 	cout << endl;
-	for (int i = 0; i < min(10, rows); i++)
-	{
-		for (int j = 0; j < min(10, cols); j++)
+	cout << start << " <- start" << endl;
+	if (start){
+		for (int i = 0; i < min(10, rows); i++)
 		{
-			pn((*this)(i, j));
+			for (int j = 0; j < min(10, cols); j++)
+			{
+				pn((*this)(i, j));
+			}
+			cout << endl;
 		}
-		cout << endl;
+	}
+	else{
+		for (int i = max(0, rows - 10); i < rows; i++)
+		{
+			for (int j = max(10, cols - 10); j < cols; j++)
+			{
+				pn((*this)(i, j));
+			}
+			cout << endl;
+		}
 	}
 }
