@@ -1,29 +1,53 @@
-﻿Build started 1/8/2017 5:12:09 PM.
+﻿Build started 1/11/2017 12:05:56 AM.
      1>Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" on node 2 (Build target(s)).
      1>AddCudaCompileDeps:
          D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /DWIN64 /D_DEBUG /D_CONSOLE /D_MBCS /ID:\ProgramData\opencv\build\include /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" /I. /FIcuda_runtime.h /c "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\kernel.cu" 
      1>Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (1) is building "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (1:2) on node 2 (CudaBuildCore target(s)).
      1>CudaBuildCore:
          Compiling CUDA source file kernel.cu...
-         cmd.exe /C "D:\Users\Bishal Santra\AppData\Local\Temp\tmp6c4eb9973c6d4fbc9c6e7154f5524324.cmd"
+         cmd.exe /C "D:\Users\Bishal Santra\AppData\Local\Temp\tmp0f7932f2dca14fcab95a77d9a3c5ee11.cmd"
          "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\kernel.cu"
          
          d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\kernel.cu" 
      1>D:\ProgramData\opencv\build\include\opencv2/core/base.hpp(363): warning : function declared with "noreturn" does return
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.h(29): error : expected a ","
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.h(35): warning : parsing restarts here after previous syntax error
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.h(29): error : no instance of overloaded function "get" matches the required type
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.h(29): error : expected a ","
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.h(35): warning : parsing restarts here after previous syntax error
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.h(29): error : no instance of overloaded function "get" matches the required type
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.h(29): error : expected a ","
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.h(35): warning : parsing restarts here after previous syntax error
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.h(29): error : no instance of overloaded function "get" matches the required type
+     1>d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(204): warning : variable "extra" was declared but never referenced
+     1>D:\ProgramData\opencv\build\include\opencv2/core/base.hpp(363): warning : function declared with "noreturn" does return
+     1>d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(204): warning : variable "extra" was declared but never referenced
+     1>CUDACOMPILE : ptxas warning : Stack size for entry function '_Z16gammaTest_kernelP17curandStateXORWOWP7double2Pd' cannot be statically determined
          kernel.cu
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\BuildCustomizations\CUDA 8.0.targets(687,9): error MSB3721: The command ""C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\kernel.cu"" exited with code 2.
-     1>Done Building Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (CudaBuildCore target(s)) -- FAILED.
-     1>Done Building Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (Build target(s)) -- FAILED.
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ImLoader.h(34): warning C4520: 'ImLoader' : multiple default constructors specified
+     1>d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(34): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(68): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(76): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuOpsAPI.h(100): warning C4244: 'argument' : conversion from 'double' to 'unsigned int', possible loss of data
+                 d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(51) : see reference to function template instantiation 'void MatMul<float,bool,double>(T1 *,T2 *,T3 *,int,int,int)' being compiled
+                 with
+                 [
+                     T1=float
+         ,            T2=bool
+         ,            T3=double
+                 ]
+     1>Done Building Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (CudaBuildCore target(s)).
+     1>Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\cuMatPro_v1.exe" /INCREMENTAL /NOLOGO /LIBPATH:D:\ProgramData\opencv\build\x64\vc12\lib /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64" /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64" cublas.lib curand.lib cudart.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opencv_world310d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\cuMatPro_v1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\cuMatPro_v1.lib" /MACHINE:X64 x64\Debug\kernel.cu.obj
+         x64\Debug\DLConfig.obj
+         x64\Debug\DLLayer_GPU.obj
+         x64\Debug\gpuMat.obj
+         x64\Debug\gpuOpsAPI.obj
+         x64\Debug\ImLoader.obj
+         x64\Debug\Timer.obj
+         x64\Debug\Utilities.obj
+         cuMatPro_v1.vcxproj -> d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\cuMatPro_v1.exe
+       PostBuildEvent:
+         echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\cudart*.dll" "d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\"
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\cudart*.dll" "d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\"
+         :VCEnd
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\cudart*.dll" "d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\"
+         C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\cudart32_80.dll
+         C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\cudart64_80.dll
+                 2 file(s) copied.
+     1>Done Building Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:02.53
+Time Elapsed 00:00:07.26

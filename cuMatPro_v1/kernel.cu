@@ -1,6 +1,8 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include "cublas_v2.h"
+#include <curand.h>
+#include <curand_kernel.h>
 
 #include <iostream>
 #include "gpuMat.h"
@@ -9,6 +11,7 @@
 #include "DLLayer_GPU.h"
 #include "ImLoader.h"
 #include "DLConfig.h"
+#include "ModelParams.h"
 
 #define min(x, y) ((x)<(y)?(x):(y))
 
@@ -157,10 +160,145 @@ int calcN(int imsize, int patchsize, int imcount)
 {
 	return (imsize - patchsize + 1)*(imsize - patchsize + 1)*imcount;
 }
-
+void DLCode();
+void testRand();
 int main(){
 	//test();
+	//DLCode();
+	testRand();
+}
+
+__global__ void setup_kernel(curandState_t* d_localstates)
+{
+	int id = threadIdx.x;
+	curand_init(1234, id, 0, &d_localstates[id]);
+}
+
+__global__ void generate_kernel(double* d_samples, curandState_t* d_localstates)
+{
+	int length = 16;
+	int sid = threadIdx.x * length;
+	curandState_t localState = d_localstates[threadIdx.x];
+	for (int i = 0; i < length; i++)
+	{
+		d_samples[sid + i] = curand_uniform(&localState);
+	}
+}
+
+/*
+Gamma Random Variable generator
+Marsaglia and Tsang’s Method
+*/
+__device__ void gamrnd_d(double* x, double2* params, curandState_t* d_localstates)
+{
+	double alpha = params->x;
+	double beta = params->y;	
+
+	if (alpha >= 1){
+		curandState_t localState = *d_localstates; // Be careful the change in localState variable needs to be reflected back to d_localStates
+		double d = alpha - 1 / 3.0, c = 1 / sqrt(9 * d);
+		do{
+			double z = curand_normal(&localState);
+			double u = curand_uniform(&localState);
+			double v = pow((double) 1.0f + c*z, (double) 3.0f);
+			double extra = 0;
+			if (z > -1 / c && log(u) < (z*z / 2 + d - d*v + d*log(v))){
+				*x = d*v/beta;
+				*d_localstates = localState;
+				return;
+			}
+		} while (true);
+	}
+	else{
+		double r;
+		params->x += 1;
+		gamrnd_d(&r, params, d_localstates);
+
+		curandState_t localState = *d_localstates;
+		double u = curand_uniform(&localState);
+		*x = r*pow((double)u, (double) 1 / alpha);
+		params->x -= 1;
+		return;
+	}
+}
+
+__global__ void gammaTest_kernel(curandState_t* d_localstates, double2* params, double* d_samples)
+{
+	int length = 16;
+	int sid = threadIdx.x * length;
+	curandState_t localState = d_localstates[threadIdx.x];
+	for (int i = 0; i < length; i++)
+	{
+		gamrnd_d(d_samples + sid + i, params, &localState);
+	}
+}
+
+__global__ void initModelParams_kernel(_modelParams* modelParams, curandState_t* d_localstates)
+{
+	double x = curand_normal(&d_localstates[0]);
+	double u = curand_uniform(&d_localstates[0]);
+}
+
+__global__ void sampleModelParams_kernel(_modelParams* modelParams, curandState_t* d_localstates)
+{
+
+}
+
+
+void testRand()
+{
+	curandState_t* d_states;
+	int seqs = 100;
+	int length = 16;
+	cudaMalloc(&d_states, sizeof(curandState_t) * seqs);
+	setup_kernel<<<1, seqs>>>(d_states);
+	double* samples = new double[seqs * length];
+	double* d_samples;
+	size_t bytes = sizeof(double)*seqs * length;
+	cudaMalloc(&d_samples, bytes);
+	cudaMemset(d_samples, 0, bytes);
+	/*generate_kernel<<<1, seqs>>>(d_samples, d_states);
+	cudaMemcpy(samples, d_samples, bytes, cudaMemcpyDeviceToHost);
+
+	for (int s = 0; s < seqs; s++)
+	{
+		for (int i = 0; i < length; i++)
+		{
+			printf("%4.2f ", samples[s * length + i]);
+		}
+		cout << endl;
+	}*/
+
 	
+	cout << "Gamma Distro" << endl;
+	double2 params{ 12, 4 };
+	double2* params_d;
+	cudaMalloc(&params_d, sizeof(double2));
+	cudaMemcpy(params_d, &params, sizeof(double2), cudaMemcpyHostToDevice);
+	cout << "Power Test:" << pow(2, 3) << endl;
+	gammaTest_kernel<<<1, seqs>>>(d_states, params_d, d_samples);
+
+	cudaMemcpy(samples, d_samples, bytes, cudaMemcpyDeviceToHost);
+
+	for (int s = 0; s < seqs; s++)
+	{
+		for (int i = 0; i < length; i++)
+		{
+			printf("%4.2f ", samples[s * length + i]);
+		}
+		cout << endl;
+	}
+
+
+	// Free mems
+	delete[] samples;
+	cudaFree(d_samples);
+	cudaFree(d_states);
+
+}
+
+void DLCode()
+{
 	int propImSize = 256;
 	int propPatchSize = 8;
 	int propImCount = 5;
@@ -184,4 +322,7 @@ int main(){
 	gpuMat<double> PI(K, 1);
 	gpuMat<double> post_PI(K, N);
 
+	ModelParams modelParams1;
+
+	
 }

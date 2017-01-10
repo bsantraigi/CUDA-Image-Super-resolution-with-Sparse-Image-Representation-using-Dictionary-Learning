@@ -37,6 +37,9 @@
     <ClInclude Include="DLConfig.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ModelParams.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gpuMat.cpp">
