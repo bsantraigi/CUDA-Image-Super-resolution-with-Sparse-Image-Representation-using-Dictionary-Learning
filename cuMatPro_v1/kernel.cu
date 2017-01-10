@@ -222,14 +222,46 @@ __device__ void gamrnd_d(double* x, double2* params, curandState_t* d_localstate
 	}
 }
 
-__global__ void gammaTest_kernel(curandState_t* d_localstates, double2* params, double* d_samples)
+/*
+Algorithm as mentioned in Wikipedia:
+x ~ Gamma(a, 1)
+y ~ Gamma(b, 1)
+then,
+z = x/(x+y) ~ Beta(a, b)
+*/
+__device__ void betarnd_d(double* x, double2* params, curandState_t* d_localstates)
 {
-	int length = 16;
+	double alpha = params->x;
+	double beta = params->y;
+
+	double2 params1{ params->x, 1 };
+	double x1;
+	gamrnd_d(&x1, &params1, d_localstates);
+
+	double2 params2{ params->y, 1 };
+	double x2;
+	gamrnd_d(&x2, &params2, d_localstates);
+
+	*x = x1 / (x1 + x2);
+}
+
+__global__ void gammaTest_kernel(curandState_t* d_localstates, double2* params, double* d_samples, int length)
+{
 	int sid = threadIdx.x * length;
 	curandState_t localState = d_localstates[threadIdx.x];
 	for (int i = 0; i < length; i++)
 	{
 		gamrnd_d(d_samples + sid + i, params, &localState);
+	}
+}
+
+__global__ void betaTest_kernel(curandState_t* d_localstates, double2* params, double* d_samples, int length)
+{
+	int sid = threadIdx.x * length;
+	curandState_t localState = d_localstates[threadIdx.x];
+	for (int i = 0; i < length; i++)
+	{
+		betarnd_d(d_samples + sid + i, params, &localState);
 	}
 }
 
@@ -248,8 +280,8 @@ __global__ void sampleModelParams_kernel(_modelParams* modelParams, curandState_
 void testRand()
 {
 	curandState_t* d_states;
-	int seqs = 100;
-	int length = 16;
+	int seqs = 200;
+	int length = 32;
 	cudaMalloc(&d_states, sizeof(curandState_t) * seqs);
 	setup_kernel<<<1, seqs>>>(d_states);
 	double* samples = new double[seqs * length];
@@ -262,33 +294,64 @@ void testRand()
 
 	for (int s = 0; s < seqs; s++)
 	{
-		for (int i = 0; i < length; i++)
-		{
-			printf("%4.2f ", samples[s * length + i]);
-		}
-		cout << endl;
+	for (int i = 0; i < length; i++)
+	{
+	printf("%4.2f ", samples[s * length + i]);
+	}
+	cout << endl;
 	}*/
 
-	
-	cout << "Gamma Distro" << endl;
-	double2 params{ 12, 4 };
-	double2* params_d;
-	cudaMalloc(&params_d, sizeof(double2));
-	cudaMemcpy(params_d, &params, sizeof(double2), cudaMemcpyHostToDevice);
-	cout << "Power Test:" << pow(2, 3) << endl;
-	gammaTest_kernel<<<1, seqs>>>(d_states, params_d, d_samples);
 
-	cudaMemcpy(samples, d_samples, bytes, cudaMemcpyDeviceToHost);
-
-	for (int s = 0; s < seqs; s++)
 	{
-		for (int i = 0; i < length; i++)
+		cout << "Gamma Distro" << endl;
+		double2 params{ 0.5, 4 };
+		double2* params_d;
+		cudaMalloc(&params_d, sizeof(double2));
+		cudaMemcpy(params_d, &params, sizeof(double2), cudaMemcpyHostToDevice);
+		gammaTest_kernel << <1, seqs >> >(d_states, params_d, d_samples, length);
+
+		cudaMemcpy(samples, d_samples, bytes, cudaMemcpyDeviceToHost);
+
+		/*for (int s = 0; s < seqs; s++)
 		{
-			printf("%4.2f ", samples[s * length + i]);
+			for (int i = 0; i < length; i++)
+			{
+				printf("%4.2f ", samples[s * length + i]);
+			}
+			cout << endl;
+		}*/
+
+		ofstream gcsv("gamout.csv");
+		for (int s = 0; s < seqs; s++)
+		{
+			for (int i = 0; i < length; i++)
+			{
+				gcsv << samples[s * length + i] << endl;
+			}
 		}
-		cout << endl;
+		gcsv.close();
 	}
 
+	{
+		cout << "Beta Distro" << endl;
+		double2 params{ 0.8, 4 };
+		double2* params_d;
+		cudaMalloc(&params_d, sizeof(double2));
+		cudaMemcpy(params_d, &params, sizeof(double2), cudaMemcpyHostToDevice);
+		betaTest_kernel << <1, seqs >> >(d_states, params_d, d_samples, length);
+
+		cudaMemcpy(samples, d_samples, bytes, cudaMemcpyDeviceToHost);
+
+		ofstream gcsv("betaout.csv");
+		for (int s = 0; s < seqs; s++)
+		{
+			for (int i = 0; i < length; i++)
+			{
+				gcsv << samples[s * length + i] << endl;
+			}
+		}
+		gcsv.close();
+	}
 
 	// Free mems
 	delete[] samples;
