@@ -1,4 +1,4 @@
-#include "Utilities.h"
+#include "Utilities.cuh"
 
 map<string, int> Utilities::groupCounts;
 map<string, vector<string> > Utilities::groupedImages;

@@ -158,18 +158,20 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ModelParams.h" />
-    <ClInclude Include="DLConfig.h" />
-    <ClInclude Include="DLLayer_GPU.h" />
-    <ClInclude Include="gpuMat.h" />
-    <ClInclude Include="gpuOpsAPI.h" />
-    <ClInclude Include="ImLoader.h" />
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="Utilities.h" />
+    <ClInclude Include="DLLayer.cu" />
+    <ClInclude Include="kernel.cuh" />
+    <ClInclude Include="ModelParams_kernels.cu" />
+    <ClInclude Include="ModelParams.cu" />
+    <ClInclude Include="DLConfig.cu" />
+    <ClInclude Include="gpuMat.cuh" />
+    <ClInclude Include="gpuOpsAPI.cuh" />
+    <ClInclude Include="ImLoader.cuh" />
+    <ClInclude Include="Random_kernels.cuh" />
+    <ClInclude Include="Timer.cuh" />
+    <ClInclude Include="Utilities.cuh" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DLConfig.cpp" />
-    <ClCompile Include="DLLayer_GPU.cpp" />
+    <ClCompile Include="DLLayer_kernels.cu" />
     <ClCompile Include="gpuMat.cpp" />
     <ClCompile Include="gpuOpsAPI.cpp" />
     <ClCompile Include="ImLoader.cpp" />

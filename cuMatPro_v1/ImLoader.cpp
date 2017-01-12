@@ -1,4 +1,4 @@
-#include "ImLoader.h"
+#include "ImLoader.cuh"
 
 ImLoader::ImLoader():ImLoader(16, 8, "Faces_easy", "D:/ProjectData/caltech101/101_ObjectCategories/") 
 {

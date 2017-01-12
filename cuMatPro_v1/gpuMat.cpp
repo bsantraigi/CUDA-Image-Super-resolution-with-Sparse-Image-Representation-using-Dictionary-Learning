@@ -1,2 +1,2 @@
-#include "gpuMat.h"
+#include "gpuMat.cuh"
 

@@ -1,2 +1,2 @@
-#include "gpuOpsAPI.h"
+#include "gpuOpsAPI.cuh"
 

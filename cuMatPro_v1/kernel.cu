@@ -1,182 +1,17 @@
-#include "cuda_runtime.h"
-#include "device_launch_parameters.h"
-#include "cublas_v2.h"
-#include <curand.h>
-#include <curand_kernel.h>
-
-#include <iostream>
-#include "gpuMat.h"
-#include "gpuOpsAPI.h"
-#include "Timer.h"
-#include "DLLayer_GPU.h"
-#include "ImLoader.h"
-#include "DLConfig.h"
-#include "ModelParams.h"
-#include "Random_kernels.h"
-
-#define min(x, y) ((x)<(y)?(x):(y))
-
-using namespace std;
+#pragma once
+#include "kernel.cuh"
 
 Timer timer1;
 
-int test()
-{
-	int S = 20;
-	gpuMat<float> Y(S, S);
-	gpuMat<bool> B(S, S);
-	gpuMat<double> C(S, S);
-	cout << Y.cols << "by" << Y.rows << endl;
-
-	for (int i = 0; i < S; i++)
-	{
-		for (int j = 0; j < S; j++)
-		{
-			Y(i, j) = i*Y.cols + j;
-			B(i, j) = (i>=j);
-		}
-	}
-	Y.copy2Device();
-	B.copy2Device();
-
-	Y.print();
-	B.print();
-
-	// CUBLAS TEST
-	/*float al = 1;
-	float bet = 0;
-	cublasHandle_t handle;
-	cublasCreate(&handle);
-	cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, S, S, S, &al, Y.d_elems, S, B.d_elems, S, &bet, C.d_elems, S);*/
-
-	MatMul<float, bool, double>(Y.d_elems, B.d_elems, C.d_elems, S, S, S);
-
-	C.copy2Host();
-	C.print();
-
-
-	// Test functions for rectangular matrices
-	int m = 682768, n = 256, k = 128;
-	gpuMat<float> mat1(m, k);
-	gpuMat<float> vec1(k, n);
-	gpuMat<float> result(m, n);
-
-	for (int i = 0; i < m; i++)
-	{
-		for (int j = 0; j < k; j++)
-		{
-			//mat1(i, j) = ((i + 1)%(j + 1));
-			mat1(i, j) = (float)rand() / RAND_MAX - 0.5;
-		}
-	}
-
-	for (int i = 0; i < k; i++)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			vec1(i, j) = (float)rand() / RAND_MAX - 0.5;
-		}
-	}
-	
-	mat1.print();
-	vec1.print();
-
-	mat1.copy2Device();
-	vec1.copy2Device();
-
-	cout << "Using my API." << endl;
-	{
-		cudaEvent_t start, stop;
-		float elapsedTime;
-
-		cudaEventCreate(&start);
-		cudaEventRecord(start, 0);
-
-		//Do kernel activity here
-		MatMul<float, float, float>(mat1.d_elems, vec1.d_elems, result.d_elems, m, n, k);
-
-		cudaEventCreate(&stop);
-		cudaEventRecord(stop, 0);
-		cudaEventSynchronize(stop);
-
-		cudaEventElapsedTime(&elapsedTime, start, stop);
-		printf("Elapsed time : %f ms\n", elapsedTime);
-	}
-
-	result.copy2Host();
-	
-	result.print();
-
-	cout << "Using CUBLAS" << endl;
-	float al = 1;
-	float bet = 0;
-	cublasHandle_t handle;
-	cublasCreate(&handle);
-
-	{
-		cudaEvent_t start, stop;
-		float elapsedTime;
-
-		cudaEventCreate(&start);
-		cudaEventRecord(start, 0);
-
-		//Do kernel activity here
-		cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &al, mat1.d_elems, m, vec1.d_elems, k, &bet, result.d_elems, m);
-
-		cudaEventCreate(&stop);
-		cudaEventRecord(stop, 0);
-		cudaEventSynchronize(stop);
-
-		cudaEventElapsedTime(&elapsedTime, start, stop);
-		printf("Elapsed time : %f ms\n", elapsedTime);
-	}
-	result.copy2Host();
-
-	result.print();
-
-	/*cout << "Calculating in host CPU | Single thread" << endl;
-	{
-		timer1.start();
-		for (int i = 0; i < m; i++)
-		{
-			for (int j = 0; j < n; j++)
-			{
-				double cvalue = 0;
-				for (int l = 0; l < k; l++)
-				{
-					cvalue += mat1(i, l)*vec1(l, j);
-				}
-				result(i, j) = cvalue;
-			}
-		}
-		timer1.stop();
-	}
-
-	result.print();*/
-
-	return 0;
-}
-
-int calcN(int imsize, int patchsize, int imcount)
-{
-	return (imsize - patchsize + 1)*(imsize - patchsize + 1)*imcount;
-}
-void DLCode();
-void testRand();
 int main(){
 	//test();
 	//DLCode();
-	testRand();
+	//testRand();
+	DL_encapsulated();
 	cudaDeviceReset();
 }
 
-__global__ void setup_kernel(curandState_t* d_localstates)
-{
-	int id = threadIdx.x;
-	curand_init(1234, id, 0, &d_localstates[id]);
-}
-
-__global__ void generate_kernel(double* d_samples, curandState_t* d_localstates)
+__global__ void uniformTest_kernel(double* d_samples, curandState_t* d_localstates)
 {
 	int length = 16;
 	int sid = threadIdx.x * length;
@@ -207,21 +42,19 @@ __global__ void betaTest_kernel(curandState_t* d_localstates, double2* params, d
 	}
 }
 
-
-
 void testRand()
 {
 	curandState_t* d_states;
 	int seqs = 200;
 	int length = 32;
 	cudaMalloc(&d_states, sizeof(curandState_t) * seqs);
-	setup_kernel<<<1, seqs>>>(d_states);
+	setup_kernel<<<1, seqs>>>(d_states, time(NULL));
 	double* samples = new double[seqs * length];
 	double* d_samples;
 	size_t bytes = sizeof(double)*seqs * length;
 	cudaMalloc(&d_samples, bytes);
 	cudaMemset(d_samples, 0, bytes);
-	/*generate_kernel<<<1, seqs>>>(d_samples, d_states);
+	/*uniformTest_kernel<<<1, seqs>>>(d_samples, d_states);
 	cudaMemcpy(samples, d_samples, bytes, cudaMemcpyDeviceToHost);
 
 	for (int s = 0; s < seqs; s++)
@@ -282,6 +115,148 @@ void testRand()
 	cudaFree(d_states);
 }
 
+int testPerformance()
+{
+	int S = 20;
+	gpuMat<float> Y(S, S);
+	gpuMat<bool> B(S, S);
+	gpuMat<double> C(S, S);
+	cout << Y.cols << "by" << Y.rows << endl;
+
+	for (int i = 0; i < S; i++)
+	{
+		for (int j = 0; j < S; j++)
+		{
+			Y(i, j) = i*Y.cols + j;
+			B(i, j) = (i >= j);
+		}
+	}
+	Y.copy2Device();
+	B.copy2Device();
+
+	Y.print();
+	B.print();
+
+	// CUBLAS TEST
+	/*float al = 1;
+	float bet = 0;
+	cublasHandle_t handle;
+	cublasCreate(&handle);
+	cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, S, S, S, &al, Y.d_elems, S, B.d_elems, S, &bet, C.d_elems, S);*/
+
+	MatMul<float, bool, double>(Y.d_elems, B.d_elems, C.d_elems, S, S, S);
+
+	C.copy2Host();
+	C.print();
+
+
+	// Test functions for rectangular matrices
+	int m = 682768, n = 256, k = 128;
+	gpuMat<float> mat1(m, k);
+	gpuMat<float> vec1(k, n);
+	gpuMat<float> result(m, n);
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < k; j++)
+		{
+			//mat1(i, j) = ((i + 1)%(j + 1));
+			mat1(i, j) = (float)rand() / RAND_MAX - 0.5;
+		}
+	}
+
+	for (int i = 0; i < k; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			vec1(i, j) = (float)rand() / RAND_MAX - 0.5;
+		}
+	}
+
+	mat1.print();
+	vec1.print();
+
+	mat1.copy2Device();
+	vec1.copy2Device();
+
+	cout << "Using my API." << endl;
+	{
+		cudaEvent_t start, stop;
+		float elapsedTime;
+
+		cudaEventCreate(&start);
+		cudaEventRecord(start, 0);
+
+		//Do kernel activity here
+		MatMul<float, float, float>(mat1.d_elems, vec1.d_elems, result.d_elems, m, n, k);
+
+		cudaEventCreate(&stop);
+		cudaEventRecord(stop, 0);
+		cudaEventSynchronize(stop);
+
+		cudaEventElapsedTime(&elapsedTime, start, stop);
+		printf("Elapsed time : %f ms\n", elapsedTime);
+	}
+
+	result.copy2Host();
+
+	result.print();
+
+	cout << "Using CUBLAS" << endl;
+	float al = 1;
+	float bet = 0;
+	cublasHandle_t handle;
+	cublasCreate(&handle);
+
+	{
+		cudaEvent_t start, stop;
+		float elapsedTime;
+
+		cudaEventCreate(&start);
+		cudaEventRecord(start, 0);
+
+		//Do kernel activity here
+		cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &al, mat1.d_elems, m, vec1.d_elems, k, &bet, result.d_elems, m);
+
+		cudaEventCreate(&stop);
+		cudaEventRecord(stop, 0);
+		cudaEventSynchronize(stop);
+
+		cudaEventElapsedTime(&elapsedTime, start, stop);
+		printf("Elapsed time : %f ms\n", elapsedTime);
+	}
+	result.copy2Host();
+
+	result.print();
+
+	/*cout << "Calculating in host CPU | Single thread" << endl;
+	{
+	timer1.start();
+	for (int i = 0; i < m; i++)
+	{
+	for (int j = 0; j < n; j++)
+	{
+	double cvalue = 0;
+	for (int l = 0; l < k; l++)
+	{
+	cvalue += mat1(i, l)*vec1(l, j);
+	}
+	result(i, j) = cvalue;
+	}
+	}
+	timer1.stop();
+	}
+
+	result.print();*/
+
+	return 0;
+}
+
+int calcN(int imsize, int patchsize, int imcount)
+{
+	return (imsize - patchsize + 1)*(imsize - patchsize + 1)*imcount;
+}
+
 void DLCode()
 {
 	int propImSize = 256;
@@ -308,6 +283,8 @@ void DLCode()
 	gpuMat<double> post_PI(K, N);
 
 	ModelParams modelParams1;
+}
 
-	
+void DL_encapsulated(){
+	DLLayer layer1;
 }
