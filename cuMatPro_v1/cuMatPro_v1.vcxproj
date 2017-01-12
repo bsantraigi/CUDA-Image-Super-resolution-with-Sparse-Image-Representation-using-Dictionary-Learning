@@ -109,6 +109,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <AdditionalOptions>-lcublas %(AdditionalOptions)</AdditionalOptions>
       <CodeGeneration>compute_50,sm_50</CodeGeneration>
+      <GenerateRelocatableDeviceCode>false</GenerateRelocatableDeviceCode>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -156,27 +157,29 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="Random_kernels.cu" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DLConfig.cu.h" />
     <ClInclude Include="DLLayer.cu" />
-    <ClInclude Include="kernel.cuh" />
-    <ClInclude Include="ModelParams_kernels.cu" />
+    <ClInclude Include="DLLayer.cu.h" />
+    <ClInclude Include="kernel.cu.h" />
+    <ClInclude Include="ModelParams.cu.h" />
+    <ClInclude Include="ModelParams_kernels.cu.h" />
     <ClInclude Include="ModelParams.cu" />
     <ClInclude Include="DLConfig.cu" />
-    <ClInclude Include="gpuMat.cuh" />
-    <ClInclude Include="gpuOpsAPI.cuh" />
-    <ClInclude Include="ImLoader.cuh" />
-    <ClInclude Include="Random_kernels.cuh" />
-    <ClInclude Include="Timer.cuh" />
-    <ClInclude Include="Utilities.cuh" />
+    <ClInclude Include="gpuMat.cu" />
+    <ClInclude Include="gpuOpsAPI.cu" />
+    <ClInclude Include="ImLoader.cu.h" />
+    <ClInclude Include="Random_kernels.cu.h" />
+    <ClInclude Include="Timer.cu.h" />
+    <ClInclude Include="Utilities.cu.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DLLayer_kernels.cu" />
-    <ClCompile Include="gpuMat.cpp" />
-    <ClCompile Include="gpuOpsAPI.cpp" />
+    <ClCompile Include="DLLayer_kernels.cu.h" />
     <ClCompile Include="ImLoader.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="Timer.cu" />
+    <ClCompile Include="Utilities.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

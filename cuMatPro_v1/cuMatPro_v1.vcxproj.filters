@@ -14,60 +14,66 @@
     <CudaCompile Include="kernel.cu">
       <Filter>Sources</Filter>
     </CudaCompile>
+    <CudaCompile Include="Random_kernels.cu">
+      <Filter>Sources</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="kernel.cuh">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="gpuMat.cuh">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="gpuOpsAPI.cuh">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ImLoader.cuh">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Random_kernels.cuh">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.cuh">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities.cuh">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelParams_kernels.cu">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelParams.cu">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="DLLayer.cu">
+    <ClInclude Include="Random_kernels.cu.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="DLConfig.cu">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="DLLayer.cu">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="gpuMat.cu">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="gpuOpsAPI.cu">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="ImLoader.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="kernel.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelParams.cu">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelParams_kernels.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DLLayer.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelParams.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DLConfig.cu.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gpuMat.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="gpuOpsAPI.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="ImLoader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities.cpp">
+    <ClCompile Include="DLLayer_kernels.cu.h">
+      <Filter>Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cu">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="DLLayer_kernels.cu">
-      <Filter>Headers</Filter>
+    <ClCompile Include="Timer.cu">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

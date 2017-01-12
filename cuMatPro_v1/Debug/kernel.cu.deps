@@ -296,8 +296,54 @@ c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\host_defines.h
 c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\vector_functions.h
 c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\device_launch_parameters.h
 c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\vector_types.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\kernel.cu.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cublas_v2.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\cublas_api.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\driver_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\cuComplex.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\math.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\vector_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\cuda_fp16.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\library_types.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand_kernel.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_discrete.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_precalc.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mrg32k3a.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mtgp32_kernel.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\memory.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mtgp32.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\math.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_philox4x32_x.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_globals.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_uniform.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mrg32k3a.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mtgp32_kernel.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\math.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_normal.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mrg32k3a.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mtgp32_kernel.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\math.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_normal_static.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_lognormal.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mrg32k3a.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mtgp32_kernel.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\math.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_poisson.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mrg32k3a.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mtgp32_kernel.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\math.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_discrete2.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mrg32k3a.h
+c:\program files\nvidia gpu computing toolkit\cuda\v8.0\include\curand_mtgp32_kernel.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\math.h
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\iostream
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\istream
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ostream
@@ -374,6 +420,39 @@ D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cerrno
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\errno.h
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\share.h
-d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ctime
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuMat.cu
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuOpsAPI.cu
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cublas_v2.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Timer.cu.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\chrono
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ratio
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdint.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xtimec.h
+D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xthrcommon.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\DLLayer.cu.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\DLLayer_kernels.cu.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand_kernel.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams.cu.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand_kernel.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cublas_v2.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand_kernel.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\DLConfig.cu.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand_kernel.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ImLoader.cu.h

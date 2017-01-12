@@ -1,5 +1,5 @@
 #pragma once
-#include "kernel.cuh"
+#include "kernel.cu.h"
 
 Timer timer1;
 

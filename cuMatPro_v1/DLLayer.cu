@@ -1,14 +1,4 @@
-#pragma once
-#include "DLLayer_kernels.cu"
-
-class DLLayer
-{
-	DLConfig dlConfig;
-	ModelParams modelParams;
-public:
-	DLLayer();
-	~DLLayer();
-};
+#include "DLLayer.cu.h"
 
 DLLayer::DLLayer()
 {

@@ -1,20 +1,4 @@
-#pragma once
-
-#include "ModelParams_kernels.cu"
-
-using namespace std;
-
-class ModelParams{
-public:
-	_modelParams *h;
-	_modelParams *d;
-	curandState_t *localState;
-
-	ModelParams();
-	~ModelParams();
-	void Init(DLConfig &dlConfig);
-	void reflect();
-};
+#include "ModelParams.cu.h"
 
 ModelParams::ModelParams()
 {
@@ -35,7 +19,7 @@ ModelParams::~ModelParams()
 
 void ModelParams::Init(DLConfig &dlConfig)
 {
-	initGibbsParams(this->d, dlConfig.d, localState);
+	initGibbsParams_kernel << <1, 2 >> >(this->d, dlConfig.d, localState);
 	this->reflect();
 	cout << "Initial Sample gam_d: " << h->gam_d << endl;
 }

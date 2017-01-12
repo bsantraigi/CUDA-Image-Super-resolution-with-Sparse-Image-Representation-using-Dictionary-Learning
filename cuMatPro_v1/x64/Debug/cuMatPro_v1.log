@@ -1,20 +1,96 @@
-﻿Build started 1/12/2017 11:13:22 AM.
+﻿Build started 1/12/2017 10:47:14 PM.
      1>Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" on node 2 (Build target(s)).
-     1>AddCudaCompileDeps:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /DWIN64 /D_DEBUG /D_CONSOLE /D_MBCS /ID:\ProgramData\opencv\build\include /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" /I. /FIcuda_runtime.h /c "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\kernel.cu" 
      1>Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (1) is building "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (1:2) on node 2 (CudaBuildCore target(s)).
      1>CudaBuildCore:
          Compiling CUDA source file kernel.cu...
-         cmd.exe /C "D:\Users\Bishal Santra\AppData\Local\Temp\tmpce782ad226014510a2b8f005fbc73c9a.cmd"
+     1>Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (1) is building "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (1:3) on node 1 (CudaBuildCore target(s)).
+     1>CudaBuildCore:
+         Compiling CUDA source file Random_kernels.cu...
+     1>CudaBuildCore:
+         cmd.exe /C "D:\Users\Bishal Santra\AppData\Local\Temp\tmp2d28e4c4897d48bdb6e39a8dd6ad75fe.cmd"
          "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\kernel.cu"
          
          d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\kernel.cu" 
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu(12): fatal error C1083: Cannot open include file: 'DLConfig.cuh': No such file or directory
+     1>CudaBuildCore:
+         cmd.exe /C "D:\Users\Bishal Santra\AppData\Local\Temp\tmpc2ea77d39201404f8eddecf199067435.cmd"
+         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\Random_kernels.cu.obj "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\Random_kernels.cu"
+         
+         d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\Random_kernels.cu.obj "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\Random_kernels.cu" 
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(33): warning : variable "extra" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(63): warning : variable "alpha" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(64): warning : variable "beta" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(33): warning : variable "extra" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(63): warning : variable "alpha" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(64): warning : variable "beta" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu.h(22): warning : variable "gam_s" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu.h(22): warning : variable "gam_n" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu.h(22): warning : variable "gam_bias" was declared but never referenced
+     1>D:\ProgramData\opencv\build\include\opencv2/core/base.hpp(363): warning : function declared with "noreturn" does return
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(33): warning : variable "extra" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(63): warning : variable "alpha" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(64): warning : variable "beta" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(33): warning : variable "extra" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(63): warning : variable "alpha" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\Random_kernels.cu.h(64): warning : variable "beta" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu.h(22): warning : variable "gam_s" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu.h(22): warning : variable "gam_n" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu.h(22): warning : variable "gam_bias" was declared but never referenced
+     1>D:\ProgramData\opencv\build\include\opencv2/core/base.hpp(363): warning : function declared with "noreturn" does return
+       CudaBuildCore:
+         Random_kernels.cu
+     1>Done Building Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (CudaBuildCore target(s)).
+     1>CUDACOMPILE : ptxas warning : Stack size for entry function '_Z15betaTest_kernelP17curandStateXORWOWP7double2Pdi' cannot be statically determined
+     1>CUDACOMPILE : ptxas warning : Stack size for entry function '_Z16gammaTest_kernelP17curandStateXORWOWP7double2Pdi' cannot be statically determined
+     1>CUDACOMPILE : ptxas warning : Stack size for entry function '_Z22initGibbsParams_kernelP12_modelParamsP9_dlConfigP17curandStateXORWOW' cannot be statically determined
          kernel.cu
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\BuildCustomizations\CUDA 8.0.targets(687,9): error MSB3721: The command ""C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\kernel.cu"" exited with code 2.
-     1>Done Building Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (CudaBuildCore target(s)) -- FAILED.
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ImLoader.cu.h(34): warning C4520: 'ImLoader' : multiple default constructors specified
+     1>d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(51): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+     1>d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(130): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(164): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(172): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\gpuOpsAPI.cu(102): warning C4244: 'argument' : conversion from 'double' to 'unsigned int', possible loss of data
+                 d:/Users/bishal santra/documents/visual studio 2013/Projects/cuMatPro_v1/cuMatPro_v1/kernel.cu(147) : see reference to function template instantiation 'void MatMul<float,bool,double>(T1 *,T2 *,T3 *,int,int,int)' being compiled
+                 with
+                 [
+                     T1=float
+         ,            T2=bool
+         ,            T3=double
+                 ]
+     1>Done Building Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (CudaBuildCore target(s)).
+     1>ClCompile:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /ID:\ProgramData\opencv\build\include /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D WIN64 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt DLLayer_kernels.cu.h ImLoader.cpp Timer.cu Utilities.cu
+         Utilities.cu
+         Timer.cu
+     1>Timer.cu(29): warning C4244: '=' : conversion from '__int64' to 'double', possible loss of data
+         ImLoader.cpp
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ImLoader.cu.h(34): warning C4520: 'ImLoader' : multiple default constructors specified
+     1>ImLoader.cpp(29): warning C4267: '+=' : conversion from 'size_t' to 'int', possible loss of data
+         DLLayer_kernels.cu.h
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu.h(22): warning C4101: 'gam_s' : unreferenced local variable
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu.h(22): warning C4101: 'gam_n' : unreferenced local variable
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1\ModelParams_kernels.cu.h(22): warning C4101: 'gam_bias' : unreferenced local variable
+         Generating Code...
+       Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\cuMatPro_v1.exe" /INCREMENTAL /NOLOGO /LIBPATH:D:\ProgramData\opencv\build\x64\vc12\lib /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64" /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64" cublas.lib curand.lib cudart.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opencv_world310d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\cuMatPro_v1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\cuMatPro_v1.lib" /MACHINE:X64 x64\Debug\kernel.cu.obj
+         x64\Debug\Random_kernels.cu.obj
+         x64\Debug\DLLayer_kernels.cu.obj
+         x64\Debug\ImLoader.obj
+         x64\Debug\Timer.obj
+         x64\Debug\Utilities.obj
+     1>Random_kernels.cu.obj : error LNK2005: "void __cdecl gamrnd_d(double *,struct double2 *,struct curandStateXORWOW *)" (?gamrnd_d@@YAXPEANPEAUdouble2@@PEAUcurandStateXORWOW@@@Z) already defined in kernel.cu.obj
+     1>Random_kernels.cu.obj : error LNK2005: "void __cdecl betarnd_d(double *,struct double2 *,struct curandStateXORWOW *)" (?betarnd_d@@YAXPEANPEAUdouble2@@PEAUcurandStateXORWOW@@@Z) already defined in kernel.cu.obj
+     1>DLLayer_kernels.cu.obj : error LNK2005: "void __cdecl gamrnd_d(double *,struct double2 *,struct curandStateXORWOW *)" (?gamrnd_d@@YAXPEANPEAUdouble2@@PEAUcurandStateXORWOW@@@Z) already defined in kernel.cu.obj
+     1>DLLayer_kernels.cu.obj : error LNK2005: "void __cdecl betarnd_d(double *,struct double2 *,struct curandStateXORWOW *)" (?betarnd_d@@YAXPEANPEAUdouble2@@PEAUcurandStateXORWOW@@@Z) already defined in kernel.cu.obj
+     1>DLLayer_kernels.cu.obj : error LNK2005: "void __cdecl initGibbsParams_kernel(struct _modelParams *,struct _dlConfig *,struct curandStateXORWOW *)" (?initGibbsParams_kernel@@YAXPEAU_modelParams@@PEAU_dlConfig@@PEAUcurandStateXORWOW@@@Z) already defined in kernel.cu.obj
+     1>kernel.cu.obj : error LNK2019: unresolved external symbol "public: __cdecl DLConfig::DLConfig(void)" (??0DLConfig@@QEAA@XZ) referenced in function "void __cdecl DLCode(void)" (?DLCode@@YAXXZ)
+     1>kernel.cu.obj : error LNK2019: unresolved external symbol "public: __cdecl DLConfig::~DLConfig(void)" (??1DLConfig@@QEAA@XZ) referenced in function "void __cdecl DLCode(void)" (?DLCode@@YAXXZ)
+     1>kernel.cu.obj : error LNK2019: unresolved external symbol "public: __cdecl ModelParams::ModelParams(void)" (??0ModelParams@@QEAA@XZ) referenced in function "void __cdecl DLCode(void)" (?DLCode@@YAXXZ)
+     1>kernel.cu.obj : error LNK2019: unresolved external symbol "public: __cdecl ModelParams::~ModelParams(void)" (??1ModelParams@@QEAA@XZ) referenced in function "void __cdecl DLCode(void)" (?DLCode@@YAXXZ)
+     1>kernel.cu.obj : error LNK2019: unresolved external symbol "public: __cdecl DLLayer::DLLayer(void)" (??0DLLayer@@QEAA@XZ) referenced in function "void __cdecl DL_encapsulated(void)" (?DL_encapsulated@@YAXXZ)
+     1>kernel.cu.obj : error LNK2019: unresolved external symbol "public: __cdecl DLLayer::~DLLayer(void)" (??1DLLayer@@QEAA@XZ) referenced in function "void __cdecl DL_encapsulated(void)" (?DL_encapsulated@@YAXXZ)
+     1>d:\users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\x64\Debug\cuMatPro_v1.exe : fatal error LNK1120: 6 unresolved externals
      1>Done Building Project "d:\Users\bishal santra\documents\visual studio 2013\Projects\cuMatPro_v1\cuMatPro_v1\cuMatPro_v1.vcxproj" (Build target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:01.25
+Time Elapsed 00:00:07.82
