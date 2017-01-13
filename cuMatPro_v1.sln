@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cuMatPro_v1", "cuMatPro_v1\cuMatPro_v1.vcxproj", "{447EF1A3-CAE7-4441-A187-9AA84A2D3DE1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cuMatPro_v1.1", "cuMatPro_v1.1\cuMatPro_v1.1.vcxproj", "{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,14 @@ Global
 		{447EF1A3-CAE7-4441-A187-9AA84A2D3DE1}.Release|Win32.Build.0 = Release|Win32
 		{447EF1A3-CAE7-4441-A187-9AA84A2D3DE1}.Release|x64.ActiveCfg = Release|x64
 		{447EF1A3-CAE7-4441-A187-9AA84A2D3DE1}.Release|x64.Build.0 = Release|x64
+		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Debug|Win32.Build.0 = Debug|Win32
+		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Debug|x64.ActiveCfg = Debug|x64
+		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Debug|x64.Build.0 = Debug|x64
+		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Release|Win32.ActiveCfg = Release|Win32
+		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Release|Win32.Build.0 = Release|Win32
+		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Release|x64.ActiveCfg = Release|x64
+		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

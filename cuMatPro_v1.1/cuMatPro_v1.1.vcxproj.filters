@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu">
+      <Filter>Sources</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Random_kernels.cu">
+      <Filter>Sources</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DLLayer_kernels.cu.h">
+      <Filter>Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="ImLoader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cu">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cu">
+      <Filter>Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DLConfig.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DLLayer.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="gpuMat.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="gpuOpsAPI.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImLoader.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="kernel.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelParams.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelParams_kernels.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Random_kernels.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.cu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DLConfig.cu">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="DLLayer.cu">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="gpuMat.cu">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="gpuOpsAPI.cu">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelParams.cu">
+      <Filter>Sources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{f6e8a4c4-0c79-4c92-8765-b65489ec374e}</UniqueIdentifier>
+      <Extensions>h;cuh</Extensions>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{10969b54-b92d-48cf-bd03-0a762a2916d6}</UniqueIdentifier>
+      <Extensions>cu;c;cpp</Extensions>
+    </Filter>
+  </ItemGroup>
+</Project>
