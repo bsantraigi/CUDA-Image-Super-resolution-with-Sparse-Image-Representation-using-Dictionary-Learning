@@ -7,12 +7,10 @@ int main(){
 	//test();
 	//DLCode();
 	//testRand();
-	//DL_encapsulated();
-	testPerformance();
+	DL_encapsulated();
+	//testPerformance();
 	cudaDeviceReset();
 }
-
-
 
 int testPerformance()
 {
@@ -151,32 +149,37 @@ int testPerformance()
 	return 0;
 }
 
-int calcN(int imsize, int patchsize, int imcount)
-{
-	return (imsize - patchsize + 1)*(imsize - patchsize + 1)*imcount;
-}
+//int calcN(int imsize, int patchsize, int imcount)
+//{
+//	return (imsize - patchsize + 1)*(imsize - patchsize + 1)*imcount;
+//}
+//
+//void DLCode()
+//{
+//	int propImSize = 256;
+//	int propPatchSize = 8;
+//	int propImCount = 5;
+//	int N = calcN(propImSize, propPatchSize, propImCount);
+//	int M = propPatchSize*propPatchSize;
+//	int K = 100;
+//	cout << "M: " << M << ", N: " << N << ", K: " << K << endl;
+//
+//	ImLoader imloader(propImSize, propPatchSize);
+//	gpuMat<double> Y(M, N);
+//	imloader.GetDataMatrix(Y, propImCount);
+//
+//	gpuMat<double> D(M, K);
+//	gpuMat<double> S(K, N);
+//	gpuMat<bool> B(K, N);
+//	gpuMat<double> PI(K, 1);
+//	gpuMat<double> post_PI(K, N);
+//
+//	
+//}
 
-void DLCode()
-{
+void DL_encapsulated(){
 	int propImSize = 256;
 	int propPatchSize = 8;
 	int propImCount = 5;
-	int N = calcN(propImSize, propPatchSize, propImCount);
-	int M = propPatchSize*propPatchSize;
-	int K = 100;
-	cout << "M: " << M << ", N: " << N << ", K: " << K << endl;
-
-	ImLoader imloader(propImSize, propPatchSize);
-	gpuMat<double> Y(M, N);
-	imloader.GetDataMatrix(Y, propImCount);
-
-	gpuMat<double> D(M, K);
-	gpuMat<double> S(K, N);
-	gpuMat<bool> B(K, N);
-	gpuMat<double> PI(K, 1);
-	gpuMat<double> post_PI(K, N);
-}
-
-void DL_encapsulated(){
-	DLLayer layer1 = DLLayer();
+	DLLayer layer1 = DLLayer(propImSize, propPatchSize, propImCount);
 }

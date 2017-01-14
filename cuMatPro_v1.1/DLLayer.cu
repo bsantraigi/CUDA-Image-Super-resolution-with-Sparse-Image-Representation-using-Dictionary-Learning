@@ -8,6 +8,8 @@
 #include <iostream>
 
 // User defined Libraries
+#include "Utilities.cu.h"
+#include "gpuMat.cu"
 
 using namespace std;
 
@@ -39,10 +41,18 @@ public:
 	_dlConfig *h_dlConfig;
 	_dlConfig *d_dlConfig;
 
+	// Actual YDSB matrices
+	int N, M, K;
+	gpuMat<double> D;
+	gpuMat<double> S;
+	gpuMat<bool> B;
+	gpuMat<double> PI;
+	gpuMat<double> post_PI;
+
 	void Init();
 	void reflect();
 
-	DLLayer();
+	DLLayer(int propImSize = 256, int propPatchSize = 8, int propImCount = 5);
 	~DLLayer();
 };
 //#include "DLLayer.cu.h"
@@ -78,7 +88,6 @@ __device__ void gamrnd_d(double* x, double2* params, curandState_t* d_localstate
 			double z = curand_normal(&localState);
 			double u = curand_uniform(&localState);
 			double v = pow((double) 1.0f + c*z, (double) 3.0f);
-			double extra = 0;
 			if (z > -1 / c && log(u) < (z*z / 2 + d - d*v + d*log(v))){
 				*x = d*v / beta;
 				*d_localstates = localState;
@@ -109,9 +118,6 @@ z = x/(x+y) ~ Beta(a, b)
 */
 __device__ void betarnd_d(double* x, double2* params, curandState_t* d_localstates)
 {
-	double alpha = params->x;
-	double beta = params->y;
-
 	double2 params1{ params->x, 1 };
 	double x1;
 	gamrnd_d(&x1, &params1, d_localstates);
@@ -126,28 +132,109 @@ __device__ void betarnd_d(double* x, double2* params, curandState_t* d_localstat
 __global__ void initGibbsParams_kernel(_modelParams* modelParams, _dlConfig* dlConfig, curandState_t* d_localstates)
 {
 	double2 hyperParams_d{ dlConfig->a_d, dlConfig->b_d };
+	double2 hyperParams_s{ dlConfig->a_s, dlConfig->b_s };
+	double2 hyperParams_n{ dlConfig->a_n, dlConfig->b_n };
+	double2 hyperParams_bias{ dlConfig->a_bias, dlConfig->b_bias };
 	double gam_d, gam_s, gam_n, gam_bias;
 	// Sample from gamrnd_d here
 	gamrnd_d(&gam_d, &hyperParams_d, d_localstates);
+	gamrnd_d(&gam_s, &hyperParams_s, d_localstates);
+	gamrnd_d(&gam_n, &hyperParams_n, d_localstates);
+	gamrnd_d(&gam_bias, &hyperParams_bias, d_localstates);
 
 	// Copy the sampled values to modelParams
 	modelParams->gam_d = gam_d;
-	/*modelParams->gam_s = gam_s;
+	modelParams->gam_s = gam_s;
 	modelParams->gam_n = gam_n;
-	modelParams->gam_bias = gam_bias;*/
+	modelParams->gam_bias = gam_bias;
+}
+
+/*
+Just fill in the D[:, col] with samples from a standard normal Dist.
+Just launch with 1D launch configuration - split into blocks s.t.
+each block has close to permissible amount of concurrent threads
+*/
+__global__ void DPointSample_kernel(double* D, int2* _size, int col, curandState_t* d_localstates)
+{
+	int Rows = _size->y;
+	int Cols = _size->x;
+
+	int row = blockIdx.x*blockDim.x + threadIdx.x;
+	D[col*Rows + row] = curand_normal(&d_localstates[row]);
+}
+
+/*
+Using Cholesky decomposition transform the already sampled
+column D[:, col]
+*/
+__global__ void DSetVar_kernel(double* D, double* muD, double* covar, int2* _size, int col)
+{
+	int Rows = _size->y;
+	int Cols = _size->x;
+
+	// Do cholskey decomp
+	// Multiply
+}
+
+__global__ void DSetMean_kernel(double* D, double* muD, int2* _size, int col)
+{
+	int Rows = _size->y;
+	int Cols = _size->x;
+
+	int row = blockIdx.x*blockDim.x + threadIdx.x;
+	D[col*Rows + row] = D[col*Rows + row] + muD[row];
+}
+
+void mvnrnd_h(gpuMat<double> &D, gpuMat<double> &muD, gpuMat<double> &covar, gpuMat<double> &Ld, int col)
+{
+	// Launch DPointSample_kernel
+
+	// Cholesky Decomp of covar and find Ld
+
+	// Apply covar transformation - Multiply with Ld
+
+	// Add mu - Launch DSetMean_kernel
+
+}
+
+__global__ void initDMatrix_kernel(double* D, int2* _size, int col, _modelParams* params, curandState_t* d_localstates)
+{
+	int rows = _size->y;
+	int cols = _size->x;
+}
+/*
+Calculate value of N from imsize, patchsize & imcount
+*/
+int calcN(int imsize, int patchsize, int imcount)
+{
+	return (imsize - patchsize + 1)*(imsize - patchsize + 1)*imcount;
 }
 
 /*
 DLLayer Class method definitions
+Must use copy constructor for objects (no need for pointers as temporary
+objects aren't the issue there)
 */
-DLLayer::DLLayer()
+DLLayer::DLLayer(int propImSize, int propPatchSize, int propImCount) : 
+M(propPatchSize*propPatchSize), N(calcN(propImSize, propPatchSize, propImCount)), K(100),
+D(gpuMat<double>(M, K)), S(gpuMat<double>(K, N)), B(gpuMat<bool>(K, N)), PI(gpuMat<double>(K, 1)), post_PI(gpuMat<double>(K, N))
 {
+	Utilities::prettyStart("Constructing LAYER");
+	// DLLayer Matrices YDSB	
+	cout << "M: " << M << ", N: " << N << ", K: " << K << endl;
+
+	/*D = gpuMat<double>(M, K);
+	S = gpuMat<double>(K, N);
+	B = gpuMat<bool>(K, N);
+	PI = gpuMat<double>(K, 1);
+	post_PI = gpuMat<double>(K, N);*/
+
 	// Model Params ctor
 	h_params = new _modelParams();
 	cudaMalloc(&d_params, sizeof(_modelParams));
 	cudaMalloc(&localState, sizeof(curandState_t));
 	// Need only a single state variable
-	setup_kernel << <1, 1 >> >(localState, time(NULL));
+	setup_kernel << <1, 1 >> >(localState, (unsigned int)time(NULL));
 
 	// DLConfig.cu
 	h_dlConfig = new _dlConfig();
@@ -162,11 +249,18 @@ DLLayer::DLLayer()
 	cudaMalloc(&d_dlConfig, sizeof(_dlConfig));
 	cudaMemcpy(d_dlConfig, h_dlConfig, sizeof(_dlConfig), cudaMemcpyHostToDevice);
 	
+	Utilities::prettyEnd("LAYER Constructed");	
+
+	Utilities::prettyStart("Layer Initialization STARTING");
 	this->Init();
+	Utilities::prettyStart("Layer Initialization Complete");
 }
+
 
 DLLayer::~DLLayer()
 {
+	cout << "DLLayer destructor!!!" << endl;
+
 	//ModelParams.cu
 	cout << "Destroying Model Params" << endl;
 	delete[] h_params;
@@ -174,6 +268,7 @@ DLLayer::~DLLayer()
 	cudaFree(localState);
 
 	// DLConfig.cu
+	cout << "Destroying dlConfig object" << endl;
 	free(h_dlConfig);
 	cudaFree(d_dlConfig);
 
@@ -186,6 +281,11 @@ void DLLayer::Init()
 	initGibbsParams_kernel << <1, 1 >> >(d_params, d_dlConfig, localState);
 	this->reflect();
 	cout << "Initial Sample gam_d: " << h_params->gam_d << endl;
+	cout << "Initial Sample gam_s: " << h_params->gam_s << endl;
+	cout << "Initial Sample gam_n: " << h_params->gam_n << endl;
+	cout << "Initial Sample gam_bias: " << h_params->gam_bias << endl;
+
+	//
 }
 
 void DLLayer::reflect()

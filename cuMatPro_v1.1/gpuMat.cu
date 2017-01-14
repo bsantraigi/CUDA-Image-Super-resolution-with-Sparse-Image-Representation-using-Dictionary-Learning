@@ -12,6 +12,7 @@ using namespace std;
 template <typename T>
 class gpuMat
 {
+	bool blank = true;
 public:
 	T* h_elems = nullptr;
 	T* d_elems = nullptr;
@@ -28,24 +29,38 @@ public:
 
 template <typename T>
 gpuMat<T>::gpuMat()
-{	
+{
+	blank = true;
 }
 
 template <typename T>
 gpuMat<T>::gpuMat(int rows, int cols)
 {
+	if (!blank){
+		delete[] h_elems;
+		cudaFree(d_elems);
+	}
+	blank = false;	
 	this->rows = rows;
 	this->cols = cols;
 	h_elems = new T[rows*cols];
-	cudaMalloc(&d_elems, rows*cols*sizeof(double));
+	cudaError_t err = cudaMalloc(&d_elems, rows*cols*sizeof(double));
+	if (err != cudaSuccess){
+		cout << "[gpuMat::ctor]Memory allocation on GPU failed." << endl;
+	}
 }
 
 template <typename T>
 gpuMat<T>::~gpuMat()
 {
-	cout << "Destroying gpuMat[auto]" << endl;
-	delete[] h_elems;
-	cudaFree(d_elems);
+	if (!blank){
+		cout << "[gpuMat::dtor]Destroying gpuMat[auto]" << endl;
+		delete[] h_elems;
+		cudaFree(d_elems);
+	}
+	else{
+		cout << "[gpuMat::dtor] object was blank" << endl;
+	}
 
 }
 

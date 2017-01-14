@@ -99,7 +99,7 @@ void MatMul(T1* A, T2* B, T3* C, int m, int n, int k)
 {
 	const int L = min(max(m, n), 32);
 	dim3 threadsPerBlock(L, L);
-	dim3 numBlocks(ceil((double)m / L), ceil((double)n / L));
+	dim3 numBlocks((unsigned int)ceil((double)m / L), (unsigned int)ceil((double)n / L));
 
 	cout << threadsPerBlock.y << " " << threadsPerBlock.x << endl;
 	cout << numBlocks.y << " " << numBlocks.x << endl;
