@@ -20,6 +20,7 @@ public:
 
 	gpuMat();
 	gpuMat(int rows, int cols);
+	void create(int rows, int cols);
 	~gpuMat();
 	T& operator()(int row, int col = 0);
 	void print(bool start = true);
@@ -41,6 +42,23 @@ gpuMat<T>::gpuMat(int rows, int cols)
 		cudaFree(d_elems);
 	}
 	blank = false;	
+	this->rows = rows;
+	this->cols = cols;
+	h_elems = new T[rows*cols];
+	cudaError_t err = cudaMalloc(&d_elems, rows*cols*sizeof(double));
+	if (err != cudaSuccess){
+		cout << "[gpuMat::ctor]Memory allocation on GPU failed." << endl;
+	}
+}
+
+template <typename T>
+void gpuMat<T>::create(int rows, int cols)
+{
+	if (!blank){
+		delete[] h_elems;
+		cudaFree(d_elems);
+	}
+	blank = false;
 	this->rows = rows;
 	this->cols = cols;
 	h_elems = new T[rows*cols];

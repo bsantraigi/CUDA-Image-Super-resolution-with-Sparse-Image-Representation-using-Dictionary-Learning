@@ -182,4 +182,5 @@ void DL_encapsulated(){
 	int propPatchSize = 8;
 	int propImCount = 5;
 	DLLayer layer1 = DLLayer(propImSize, propPatchSize, propImCount);
+	
 }
