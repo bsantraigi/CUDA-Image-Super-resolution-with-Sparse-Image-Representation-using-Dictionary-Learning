@@ -11,6 +11,7 @@
 // User defined Libraries
 #include "Utilities.cu.h"
 #include "gpuMat.cu"
+#include "gpuOpsAPI.cu"
 
 using namespace std;
 
@@ -35,6 +36,8 @@ typedef struct{
 	int *devInfo; // Device
 	gpuMat<double> covar; // Host-Device Paired
 	gpuMat<double> eigenVals; // Host-Device paired
+	gpuMat<double> diagonally;
+	gpuMat<double> L;
 } _cusolverStruct;
 
 // GPU Kernels
@@ -129,6 +132,12 @@ __global__ void initGibbsParams_kernel(_modelParams* modelParams, _dlConfig* dlC
 	modelParams->gam_bias = gam_bias;
 }
 
+__global__ void copyDiag_sqrt(double* srcVec, double* destMat, int m)
+{
+	int i = blockIdx.x*blockDim.x + threadIdx.x;
+	destMat[i*m + i] = sqrt(srcVec[i]);
+}
+
 /*
 Just fill in the D[:, col] with samples from a standard normal Dist.
 Just launch with 1D launch configuration - split into blocks s.t.
@@ -144,7 +153,7 @@ __global__ void DPointSample_kernel(double* D, int2* _size, int col, curandState
 }
 
 /*
-Using Cholesky decomposition transform the already sampled
+Using LLT decomposition transform the already sampled
 column D[:, col]
 */
 __global__ void DSetVar_kernel(double* D, double* L, int2* _size, int col)
@@ -166,11 +175,6 @@ __global__ void DSetMean_kernel(double* D, double* muD, int2* _size, int col)
 	D[col*Rows + row] = D[col*Rows + row] + muD[row];
 }
 
-__global__ void initDMatrix_kernel(double* D, int2* _size, int col, _modelParams* params, curandState_t* d_localstates)
-{
-	int rows = _size->y;
-	int cols = _size->x;
-}
 /*
 Calculate value of N from imsize, patchsize & imcount
 */
@@ -198,6 +202,19 @@ void InitSolverKit_evd(_cusolverStruct &solverKit, gpuMat<double> &D)
 	int Rows = D.rows;
 	solverKit.covar.create(D.rows, D.rows);
 	solverKit.eigenVals.create(D.rows, 1);
+	solverKit.diagonally.create(D.rows, D.rows);
+	solverKit.L.create(D.rows, D.rows);
+	// Initialize diagonally matrix
+	gpuMat<double> &diagonally = solverKit.diagonally;
+	for (int i = 0; i < D.rows; i++)
+	{
+		for (int j = 0; j < D.rows; j++)
+		{
+			diagonally(i, j) = 0;
+		}
+	}
+	diagonally.copy2Device();
+
 	cublasFillMode_t MODE = CUBLAS_FILL_MODE_UPPER;
 	cusolverDnCreate(&solverKit.handle);
 	cudaMalloc(&solverKit.devInfo, sizeof(int));
@@ -223,18 +240,25 @@ void Cholesky_d(gpuMat<double> &covar, _cusolverStruct &solverKit)
 	}
 }
 
-void LL_d(gpuMat<double> &covar, _cusolverStruct &solverKit)
+/*
+M = LL^T decomposition for covariance matrix
+*/
+void LLT_d(_cusolverStruct &solverKit)
 {
+	gpuMat<double> &covar = solverKit.covar;
 	cublasFillMode_t MODE = CUBLAS_FILL_MODE_LOWER;
 	cusolverStatus_t status;
-	gpuMat<double> W(covar.rows, 1);
+	gpuMat<double> &W = solverKit.eigenVals;
+	int Rows = covar.rows;
 	// cusolverDn - for dense mat, D - Double, potrf - Cholesky solver
 	// sytrf - LDLT decomposition
 	// syevd - EigenValue decomp
 	status = cusolverDnDsyevd(solverKit.handle, CUSOLVER_EIG_MODE_VECTOR, MODE,
 		covar.rows, covar.d_elems, covar.rows, W.d_elems, solverKit.workspace, solverKit.Lwork, solverKit.devInfo);
+	copyDiag_sqrt<<<1, Rows>>>(W.d_elems, solverKit.diagonally.d_elems, Rows);
+	MatMul<double, double, double>(covar.d_elems, solverKit.diagonally.d_elems, solverKit.L.d_elems, Rows, Rows, Rows);
 	if (status != cudaSuccess){
-		cout << "Cholesky Decomp. Failed Badly !!!" << endl;
+		cout << "LLT Decomp. Failed Badly !!!" << endl;
 	}
 }
 
@@ -320,7 +344,6 @@ D(gpuMat<double>(M, K)), S(gpuMat<double>(K, N)), B(gpuMat<bool>(K, N)), PI(gpuM
 	Utilities::prettyStart("Layer Initialization STARTING");
 	this->Init();
 	Utilities::prettyStart("Layer Initialization Complete");
-	srand(time(NULL));
 
 	// Dummy Code
 	gpuMat<double> m1(4, 4);
@@ -338,16 +361,23 @@ D(gpuMat<double>(M, K)), S(gpuMat<double>(K, N)), B(gpuMat<bool>(K, N)), PI(gpuM
 			}
 		}
 	}
-	solverKit1.covar.print();
 	solverKit1.covar.copy2Device();
-	
-	LL_d(solverKit1.covar, solverKit1);
-	solverKit1.covar.copy2Host();
 
+	cout << "Covar matrix, C:" << endl;
 	solverKit1.covar.print();
 
-	solverKit1.eigenVals.copy2Host();
-	solverKit1.eigenVals.print();
+	LLT_d(solverKit1);
+
+	cout << "After Decomposition, LLT:" << endl;
+	solverKit1.L.copy2Host();
+	solverKit1.L.print();
+
+	{
+		gpuMat<double> temp(4, 4);
+		MatMul<double, double, double>(solverKit1.L.d_elems, solverKit1.L.d_elems, temp.d_elems, 4, 4, 4, false, true);
+		temp.copy2Host();
+		temp.print();
+	}
 }
 
 

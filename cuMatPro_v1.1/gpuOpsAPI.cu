@@ -74,9 +74,8 @@ void Add(T1* A, T2* B, T3* C, int m, int n)
 *	multiplication of two matrices A and B where A is m x k matrix and B is a 
 *	k x n matrix.
 */
-
 template <typename T1, typename T2, typename T3>
-__global__ void matmul_d(T1* A, T2* B, T3* C, int m, int n, int k)
+__global__ void matmul_ab_d(T1* A, T2* B, T3* C, int m, int n, int k)
 {
 	int r = blockIdx.y*blockDim.y + threadIdx.y;
 	int c = blockIdx.x*blockDim.x + threadIdx.x;
@@ -91,18 +90,67 @@ __global__ void matmul_d(T1* A, T2* B, T3* C, int m, int n, int k)
 }
 
 /*
+For doing C = AB^T, 
+A is m x k matrix
+B is n x k matrix
+c is m x n matrix
+*/
+template <typename T1, typename T2, typename T3>
+__global__ void matmul_abt_d(T1* A, T2* B, T3* C, int m, int n, int k)
+{
+	int r = blockIdx.y*blockDim.y + threadIdx.y;
+	int c = blockIdx.x*blockDim.x + threadIdx.x;
+	T3 cvalue = 0;
+	if (r < m && c < n){
+		for (int i = 0; i < k; i++)
+		{
+			cvalue += (T3)(A[i*m + r] * B[i*n + c]);
+		}
+		C[c*m + r] = cvalue;
+	}
+}
+
+/*
+For doing C = A^T B,
+A is k x m matrix
+B is k x b matrix
+c is m x n matrix
+*/
+template <typename T1, typename T2, typename T3>
+__global__ void matmul_atb_d(T1* A, T2* B, T3* C, int m, int n, int k)
+{
+	int r = blockIdx.y*blockDim.y + threadIdx.y;
+	int c = blockIdx.x*blockDim.x + threadIdx.x;
+	T3 cvalue = 0;
+	if (r < m && c < n){
+		for (int i = 0; i < k; i++)
+		{
+			cvalue += (T3)(A[r*m + i] * B[c*k + i]);
+		}
+		C[c*m + r] = cvalue;
+	}
+}
+
+/*
 Call the following function like
 // MatMul<float, float, float>(Y.d_elems, B.d_elems, C.d_elems, M, N, K);
 */
 template <typename T1, typename T2, typename T3>
-void MatMul(T1* A, T2* B, T3* C, int m, int n, int k)
+void MatMul(T1* A, T2* B, T3* C, int m, int n, int k, bool tr_A = false, bool tr_B = false)
 {
 	const int L = min(max(m, n), 32);
 	dim3 threadsPerBlock(L, L);
 	dim3 numBlocks((unsigned int)ceil((double)m / L), (unsigned int)ceil((double)n / L));
 
-	cout << threadsPerBlock.y << " " << threadsPerBlock.x << endl;
-	cout << numBlocks.y << " " << numBlocks.x << endl;
-
-	matmul_d<T1, T2, T3><<<numBlocks, threadsPerBlock >>>(A, B, C, m, n, k);
+	/*cout << threadsPerBlock.y << " " << threadsPerBlock.x << endl;
+	cout << numBlocks.y << " " << numBlocks.x << endl;*/
+	if (!tr_A && !tr_B){
+		matmul_ab_d<T1, T2, T3> << <numBlocks, threadsPerBlock >> >(A, B, C, m, n, k);
+	}
+	else if (tr_A){
+		matmul_atb_d<T1, T2, T3> << <numBlocks, threadsPerBlock >> >(A, B, C, m, n, k);
+	}
+	else if (tr_B){
+		matmul_abt_d<T1, T2, T3> << <numBlocks, threadsPerBlock >> >(A, B, C, m, n, k);
+	}
 }

@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-#define pn(x) printf("%5.2f ", (double)x)
+#define pn(x) printf("%6.3f ", (double)x)
 
 using namespace std;
 
@@ -103,8 +103,9 @@ void gpuMat<T>::copy2Host()
 template <typename T>
 void gpuMat<T>::print(bool start)
 {
+	// set start = false if you want to print the bottom-right corner
+	// of a large matrix
 	cout << endl;
-	cout << start << " <- start" << endl;
 	if (start){
 		for (int i = 0; i < min(10, rows); i++)
 		{

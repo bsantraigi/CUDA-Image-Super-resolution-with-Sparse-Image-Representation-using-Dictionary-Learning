@@ -419,13 +419,6 @@ D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\errno.h
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\share.h
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ctime
-d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\gpuMat.cu
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
-d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\gpuOpsAPI.cu
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cublas_v2.h
 d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\Timer.cu.h
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\chrono
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ratio
@@ -500,4 +493,11 @@ D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\unordered_map
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xhash
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\list
 D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\unordered_set
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\gpuMat.cu
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
+d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\gpuOpsAPI.cu
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cublas_v2.h
 d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\ImLoader.cu.h

@@ -10,8 +10,8 @@
 #include <ctime>
 
 // User defined includes
-#include "gpuMat.cu"
-#include "gpuOpsAPI.cu"
+//#include "gpuMat.cu"
+//#include "gpuOpsAPI.cu"
 #include "Timer.cu.h"
 #include "DLLayer.cu"
 #include "ImLoader.cu.h"
