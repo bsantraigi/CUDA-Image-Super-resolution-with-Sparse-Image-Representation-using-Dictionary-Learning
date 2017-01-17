@@ -105,23 +105,23 @@ int main(){
 //	cublasHandle_t handle;
 //	cublasCreate(&handle);
 //
-//	{
-//		cudaEvent_t start, stop;
-//		float elapsedTime;
-//
-//		cudaEventCreate(&start);
-//		cudaEventRecord(start, 0);
-//
-//		//Do kernel activity here
-//		cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &al, mat1.d_elems, m, vec1.d_elems, k, &bet, result.d_elems, m);
-//
-//		cudaEventCreate(&stop);
-//		cudaEventRecord(stop, 0);
-//		cudaEventSynchronize(stop);
-//
-//		cudaEventElapsedTime(&elapsedTime, start, stop);
-//		printf("Elapsed time : %f ms\n", elapsedTime);
-//	}
+	//{
+	//	cudaEvent_t start, stop;
+	//	float elapsedTime;
+
+	//	cudaEventCreate(&start);
+	//	cudaEventRecord(start, 0);
+
+	//	//Do kernel activity here
+	//	cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &al, mat1.d_elems, m, vec1.d_elems, k, &bet, result.d_elems, m);
+
+	//	cudaEventCreate(&stop);
+	//	cudaEventRecord(stop, 0);
+	//	cudaEventSynchronize(stop);
+
+	//	cudaEventElapsedTime(&elapsedTime, start, stop);
+	//	printf("Elapsed time : %f ms\n", elapsedTime);
+	//}
 //	result.copy2Host();
 //
 //	result.print();

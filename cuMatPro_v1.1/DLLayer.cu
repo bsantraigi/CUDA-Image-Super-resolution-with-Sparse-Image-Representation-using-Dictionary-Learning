@@ -1,5 +1,19 @@
 #pragma once
 
+// Macro for timing kernel runs
+#define START_METER {\
+	cudaEvent_t start, stop;\
+	float elapsedTime;\
+	cudaEventCreate(&start);\
+	cudaEventRecord(start, 0);
+#define STOP_METER cudaEventCreate(&stop);\
+	cudaEventRecord(stop, 0);\
+	cudaEventSynchronize(stop);\
+	cudaEventElapsedTime(&elapsedTime, start, stop);\
+	printf("Elapsed time : %f ms\n", elapsedTime);\
+	}
+
+//Do kernel activity here
 // Standard/CUDA Includes
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
@@ -29,13 +43,23 @@ typedef struct{
 	double a_pi, b_pi;
 } _dlConfig;
 
+/*
+* DATA STRUCT: _cusolverStruct
+*	This data structure contains matrices and helper cuda variables
+*	required for sampling of D.col or S.col from a Multivariate Random distribution
+*/
 typedef struct{
 	cusolverDnHandle_t handle; //Host
 	int Lwork; // Host
 	double* workspace; //Device
 	int *devInfo; // Device
-	gpuMat<double> covar; // Host-Device Paired
-	gpuMat<double> eigenVals; // Host-Device paired
+	int2* d_size;
+
+	// Host-Device paired
+	gpuMat<double> mu;
+	gpuMat<double> covar;
+
+	gpuMat<double> eigenVals; 
 	gpuMat<double> diagonally;
 	gpuMat<double> L;
 } _cusolverStruct;
@@ -74,7 +98,7 @@ __device__ void gamrnd_d(double* x, double2* params, curandState_t* d_localstate
 			if (z > -1 / c && log(u) < (z*z / 2 + d - d*v + d*log(v))){
 				*x = d*v / beta;
 				*d_localstates = localState;
-				printf("GRND: a = %f, b = %f, x = %f\n", alpha, beta, *x);
+				//printf("GRND: a = %f, b = %f, x = %f\n", alpha, beta, *x);
 				return;
 			}
 		} while (true);
@@ -112,7 +136,7 @@ __device__ void betarnd_d(double* x, double2* params, curandState_t* d_localstat
 	*x = x1 / (x1 + x2);
 }
 
-__global__ void initGibbsParams_kernel(_modelParams* modelParams, _dlConfig* dlConfig, curandState_t* d_localstates)
+__global__ void InitGammaParams_kernel(_modelParams* modelParams, _dlConfig* dlConfig, curandState_t* d_localstates)
 {
 	double2 hyperParams_d{ dlConfig->a_d, dlConfig->b_d };
 	double2 hyperParams_s{ dlConfig->a_s, dlConfig->b_s };
@@ -155,15 +179,32 @@ __global__ void DPointSample_kernel(double* D, int2* _size, int col, curandState
 /*
 Using LLT decomposition transform the already sampled
 column D[:, col]
+
+Launch Rows number of threads
 */
 __global__ void DSetVar_kernel(double* D, double* L, int2* _size, int col)
 {
+	// Dimension of D
 	int Rows = _size->y;
-	int Cols = _size->x;
+	int DCols = _size->x;
 
 	// covar = L'*L
 	// Multiply L' * D[:, col]
 	// While multiplying use only the lower part of the covar matrix
+	int k = blockIdx.x * blockDim.x + threadIdx.x;
+	double factor = D[col*DCols + k];
+	for (int i = 0; i < Rows; i++)
+	{
+		L[k*Rows + i] *= factor;
+	}
+
+	
+	double cValue = 0;
+	for (int j = 0; j < Rows; j++)
+	{
+		cValue += L[j*Rows + k];
+	}
+	D[col*DCols + k] = cValue;
 }
 
 __global__ void DSetMean_kernel(double* D, double* muD, int2* _size, int col)
@@ -183,28 +224,31 @@ int calcN(int imsize, int patchsize, int imcount)
 	return (imsize - patchsize + 1)*(imsize - patchsize + 1)*imcount;
 }
 
-void InitSolverKit_chol(_cusolverStruct &solverKit, gpuMat<double> &D)
-{
-	int Rows = D.rows;
-	solverKit.covar.create(D.rows, D.rows);
-	cublasFillMode_t MODE = CUBLAS_FILL_MODE_UPPER;
-	cusolverDnCreate(&solverKit.handle);
-	cudaMalloc(&solverKit.devInfo, sizeof(int));
-
-	cusolverDnDpotrf_bufferSize(solverKit.handle,
-		MODE, Rows, solverKit.covar.d_elems, Rows, &solverKit.Lwork);
-
-	cudaMalloc(&solverKit.workspace, solverKit.Lwork*sizeof(double));
-}
-
 void InitSolverKit_evd(_cusolverStruct &solverKit, gpuMat<double> &D)
 {
 	int Rows = D.rows;
-	solverKit.covar.create(D.rows, D.rows);
 	solverKit.eigenVals.create(D.rows, 1);
-	solverKit.diagonally.create(D.rows, D.rows);
 	solverKit.L.create(D.rows, D.rows);
+
+	// Initialize d_size
+	int2 h_size{ D.rows, D.cols };
+	cudaMalloc(&solverKit.d_size, sizeof(int2));
+	cudaMemcpy(solverKit.d_size, &h_size, sizeof(int2), cudaMemcpyHostToDevice);
+
+	// Initialize covariance matrix to I
+	solverKit.covar.create(D.rows, D.rows);
+	gpuMat<double> &covar = solverKit.covar;
+	for (int i = 0; i < D.rows; i++)
+	{
+		for (int j = 0; j < D.rows; j++)
+		{
+			covar(i, j) = (i == j) ? 1 : 0;
+		}
+	}
+	covar.copy2Device();
+
 	// Initialize diagonally matrix
+	solverKit.diagonally.create(D.rows, D.rows);
 	gpuMat<double> &diagonally = solverKit.diagonally;
 	for (int i = 0; i < D.rows; i++)
 	{
@@ -215,6 +259,15 @@ void InitSolverKit_evd(_cusolverStruct &solverKit, gpuMat<double> &D)
 	}
 	diagonally.copy2Device();
 
+	// Initialize mu vector
+	solverKit.mu.create(Rows, 1);
+	gpuMat<double> &mu = solverKit.mu;
+	for (int i = 0; i < D.rows; i++)
+	{
+		mu(i, 0) = 0;
+	}
+	mu.copy2Device();
+
 	cublasFillMode_t MODE = CUBLAS_FILL_MODE_UPPER;
 	cusolverDnCreate(&solverKit.handle);
 	cudaMalloc(&solverKit.devInfo, sizeof(int));
@@ -223,21 +276,6 @@ void InitSolverKit_evd(_cusolverStruct &solverKit, gpuMat<double> &D)
 		MODE, Rows, solverKit.covar.d_elems, Rows, solverKit.eigenVals.d_elems, &solverKit.Lwork);
 
 	cudaMalloc(&solverKit.workspace, solverKit.Lwork*sizeof(double));
-}
-
-void Cholesky_d(gpuMat<double> &covar, _cusolverStruct &solverKit)
-{
-	cublasFillMode_t MODE = CUBLAS_FILL_MODE_LOWER;
-	cusolverStatus_t status;
-
-	// cusolverDn - for dense mat, D - Double, potrf - Cholesky solver
-	// sytrf - LDLT decomposition
-	// syevd - EigenValue decomp
-	status = cusolverDnDpotrf(solverKit.handle, MODE,
-		covar.rows, covar.d_elems, covar.rows, solverKit.workspace, solverKit.Lwork, solverKit.devInfo);
-	if (status != cudaSuccess){
-		cout << "Cholesky Decomp. Failed Badly !!!" << endl;
-	}
 }
 
 /*
@@ -253,9 +291,15 @@ void LLT_d(_cusolverStruct &solverKit)
 	// cusolverDn - for dense mat, D - Double, potrf - Cholesky solver
 	// sytrf - LDLT decomposition
 	// syevd - EigenValue decomp
+	// Taking Long time ~ 20 ms
 	status = cusolverDnDsyevd(solverKit.handle, CUSOLVER_EIG_MODE_VECTOR, MODE,
 		covar.rows, covar.d_elems, covar.rows, W.d_elems, solverKit.workspace, solverKit.Lwork, solverKit.devInfo);
-	copyDiag_sqrt<<<1, Rows>>>(W.d_elems, solverKit.diagonally.d_elems, Rows);
+
+	const int L = std::min(Rows, 32);
+	dim3 threadsPerBlock(L);
+	dim3 numBlocks((unsigned int)ceil((double)Rows / L));
+
+	copyDiag_sqrt<<<numBlocks, threadsPerBlock>>>(W.d_elems, solverKit.diagonally.d_elems, Rows);
 	MatMul<double, double, double>(covar.d_elems, solverKit.diagonally.d_elems, solverKit.L.d_elems, Rows, Rows, Rows);
 	if (status != cudaSuccess){
 		cout << "LLT Decomp. Failed Badly !!!" << endl;
@@ -295,7 +339,7 @@ public:
 
 	void Init();
 	void reflect();
-	void mvnrnd_d(gpuMat<double> &holder, gpuMat<double> &mu, gpuMat<double> &covar, int col, _cusolverStruct &solverKit);
+	void mvnrnd_d(gpuMat<double> &holder, _cusolverStruct &solverKit, int col);
 };
 
 /*
@@ -311,12 +355,6 @@ D(gpuMat<double>(M, K)), S(gpuMat<double>(K, N)), B(gpuMat<bool>(K, N)), PI(gpuM
 	// DLLayer Matrices YDSB	
 	cout << "M: " << M << ", N: " << N << ", K: " << K << endl;
 	statesCount = max(K, M);
-
-	/*D = gpuMat<double>(M, K);
-	S = gpuMat<double>(K, N);
-	B = gpuMat<bool>(K, N);
-	PI = gpuMat<double>(K, 1);
-	post_PI = gpuMat<double>(K, N);*/
 
 	// Model Params ctor
 	h_params = new _modelParams();
@@ -344,40 +382,6 @@ D(gpuMat<double>(M, K)), S(gpuMat<double>(K, N)), B(gpuMat<bool>(K, N)), PI(gpuM
 	Utilities::prettyStart("Layer Initialization STARTING");
 	this->Init();
 	Utilities::prettyStart("Layer Initialization Complete");
-
-	// Dummy Code
-	gpuMat<double> m1(4, 4);
-	_cusolverStruct solverKit1;
-	InitSolverKit_evd(solverKit1, m1);
-	
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = i; j < 4; j++)
-		{
-			solverKit1.covar(i, j) = (double)rand() / (double)RAND_MAX;
-			solverKit1.covar(j, i) = solverKit1.covar(i, j);
-			if (i == j){
-				solverKit1.covar(i, j) += 1;
-			}
-		}
-	}
-	solverKit1.covar.copy2Device();
-
-	cout << "Covar matrix, C:" << endl;
-	solverKit1.covar.print();
-
-	LLT_d(solverKit1);
-
-	cout << "After Decomposition, LLT:" << endl;
-	solverKit1.L.copy2Host();
-	solverKit1.L.print();
-
-	{
-		gpuMat<double> temp(4, 4);
-		MatMul<double, double, double>(solverKit1.L.d_elems, solverKit1.L.d_elems, temp.d_elems, 4, 4, 4, false, true);
-		temp.copy2Host();
-		temp.print();
-	}
 }
 
 
@@ -401,17 +405,25 @@ DLLayer::~DLLayer()
 
 void DLLayer::Init()
 {
-	// Initialize Model hyperparameters
-	initGibbsParams_kernel << <1, 1 >> >(d_params, d_dlConfig, d_localstates);
-	this->reflect();
-	cout << "Initial Sample gam_d: " << h_params->gam_d << endl;
-	cout << "Initial Sample gam_s: " << h_params->gam_s << endl;
-	cout << "Initial Sample gam_n: " << h_params->gam_n << endl;
-	cout << "Initial Sample gam_bias: " << h_params->gam_bias << endl;
+	// Initialize Model hyperparameters - Generating initial samples of gammas
+	InitGammaParams_kernel <<<1, 1 >>>(d_params, d_dlConfig, d_localstates);
+	//this->reflect(); // Required if printing the values
 
-	// Initialize sovler Kit
-	//InitSolverKit(solverKitD, D);
-	//InitSolverKit(solverKitS, S);
+	// Initialize LLT transformation sovler Kit
+	InitSolverKit_evd(solverKitD, D);
+	InitSolverKit_evd(solverKitS, S);
+
+	// Sample columns of D
+	cout << "** SAMPLING COLUMNS of D **" << endl;
+	
+	for (int k = 0; k < K; k++)
+	{
+		mvnrnd_d(D, solverKitD, k);
+		break;
+	}
+
+		
+	
 }
 
 void DLLayer::reflect()
@@ -420,28 +432,29 @@ void DLLayer::reflect()
 	cudaMemcpy(h_params, d_params, sizeof(_modelParams), cudaMemcpyDeviceToHost);
 }
 
-void DLLayer::mvnrnd_d(gpuMat<double> &holder, gpuMat<double> &mu, gpuMat<double> &covar, int col, _cusolverStruct &solverKit)
+void DLLayer::mvnrnd_d(gpuMat<double> &holder, _cusolverStruct &solverKit, int col)
 {
+	gpuMat<double> &covar = solverKit.covar;
 	int Rows = holder.rows;
 	int Cols = holder.cols;
-	int2 h_size{ Rows, Cols };
-	int2 *d_size; // Device allocated
-	cudaMalloc(&d_size, sizeof(int2));
-	cudaMemcpy(d_size, &h_size, sizeof(int2), cudaMemcpyHostToDevice);
 
-	dim3 threadsPerBlock(8);
-	dim3 numBlocks((uint)ceil(Rows / 8.0f));
+	const int L = std::min(Rows, 32);
+	dim3 threadsPerBlock(L);
+	dim3 numBlocks((unsigned int)ceil((double)Rows / L));
+
+	
 	// Launch DPointSample_kernel
-	DPointSample_kernel <<<numBlocks, threadsPerBlock>>> (holder.d_elems, d_size, col, d_localstates);
+	DPointSample_kernel <<<numBlocks, threadsPerBlock>>> (holder.d_elems, solverKit.d_size, col, d_localstates);
 
-	// Cholesky Decomp of covar and find Ld	
-	Cholesky_d(covar, solverKit);	
+	// LLT Decomp of covar and find Ld	
+	// Takes most time - 21 ms for a single call
+	LLT_d(solverKitD);
 
-	// Apply covar transformation - Multiply with Ld
+	// Apply covar transformation - Multiply with Ld 
+	// Taking SECOND MOST time
+	DSetVar_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, solverKit.L.d_elems, solverKit.d_size, col);
 
 	// Add mu - Launch DSetMean_kernel
-	DSetMean_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, mu.d_elems, d_size, col);
-	
-	cudaFree(d_size);
+	DSetMean_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, solverKit.mu.d_elems, solverKit.d_size, col);
 }
 
