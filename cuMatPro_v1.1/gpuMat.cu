@@ -26,6 +26,7 @@ public:
 	void print(bool start = true);
 	void copy2Device();
 	void copy2Host();
+	void ToFile(string fileName);
 };
 
 template <typename T>
@@ -126,4 +127,20 @@ void gpuMat<T>::print(bool start)
 			cout << endl;
 		}
 	}
+}
+
+template <typename T>
+void gpuMat<T>::ToFile(string filename)
+{
+	this->copy2Host();
+	ofstream os(filename);
+	for (int i = 0; i < cols; i++)
+	{
+		for (int j = 0; j < rows; j++)
+		{
+			os << h_elems[i*rows + j] << ",";
+		}
+		os << endl;
+	}
+	os.close();
 }

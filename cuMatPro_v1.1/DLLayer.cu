@@ -75,8 +75,9 @@ __global__ void setup_kernel(curandState_t* d_localstates, unsigned int seed)
 	unsigned long long subsequence,
 	unsigned long long offset,
 	curandStateXORWOW_t *state)*/
-	int id = threadIdx.x;
+	int id = blockIdx.x*blockDim.x + threadIdx.x;
 	curand_init(seed, id, 0, &d_localstates[id]);
+	//printf("[setup_kernel] id: %d, seed: %u\n", id, seed);
 }
 
 /*
@@ -174,6 +175,7 @@ __global__ void DPointSample_kernel(double* D, int2* _size, int col, curandState
 
 	int row = blockIdx.x*blockDim.x + threadIdx.x;
 	D[col*Rows + row] = curand_normal(&d_localstates[row]);
+	printf("%d, %f\n", row, D[col*Rows + row]);
 }
 
 /*
@@ -361,8 +363,12 @@ D(gpuMat<double>(M, K)), S(gpuMat<double>(K, N)), B(gpuMat<bool>(K, N)), PI(gpuM
 	cudaMalloc(&d_params, sizeof(_modelParams));
 	
 	cudaMalloc(&d_localstates, statesCount*sizeof(curandState_t));
-	// Need only a single state variable
-	setup_kernel << <(uint)ceil(statesCount/32), 32 >> >(d_localstates, (unsigned int)time(NULL));
+	
+	// Need only a M or K state variables - sampling rows of D in parallel
+	const int L = std::min(statesCount, 32);
+	dim3 threadsPerBlock(L);
+	dim3 numBlocks((unsigned int)ceil((double)statesCount / L));
+	setup_kernel <<<(uint)ceil(statesCount/L), L >>>(d_localstates, (unsigned int)time(NULL));
 
 	// DLConfig.cu
 	h_dlConfig = new _dlConfig();
@@ -415,14 +421,14 @@ void DLLayer::Init()
 
 	// Sample columns of D
 	cout << "** SAMPLING COLUMNS of D **" << endl;
-	
 	for (int k = 0; k < K; k++)
 	{
 		mvnrnd_d(D, solverKitD, k);
-		break;
+		solverKitD.covar.copy2Device();
+		if (k==2)
+			break;
 	}
-
-		
+	D.ToFile("outputs/d.csv");		
 	
 }
 
@@ -441,20 +447,19 @@ void DLLayer::mvnrnd_d(gpuMat<double> &holder, _cusolverStruct &solverKit, int c
 	const int L = std::min(Rows, 32);
 	dim3 threadsPerBlock(L);
 	dim3 numBlocks((unsigned int)ceil((double)Rows / L));
-
 	
 	// Launch DPointSample_kernel
 	DPointSample_kernel <<<numBlocks, threadsPerBlock>>> (holder.d_elems, solverKit.d_size, col, d_localstates);
 
 	// LLT Decomp of covar and find Ld	
 	// Takes most time - 21 ms for a single call
-	LLT_d(solverKitD);
+	//LLT_d(solverKitD);
 
 	// Apply covar transformation - Multiply with Ld 
 	// Taking SECOND MOST time
-	DSetVar_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, solverKit.L.d_elems, solverKit.d_size, col);
+	//DSetVar_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, solverKit.L.d_elems, solverKit.d_size, col);
 
 	// Add mu - Launch DSetMean_kernel
-	DSetMean_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, solverKit.mu.d_elems, solverKit.d_size, col);
+	//DSetMean_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, solverKit.mu.d_elems, solverKit.d_size, col);
 }
 
