@@ -53,7 +53,6 @@ typedef struct{
 	int Lwork; // Host
 	double* workspace; //Device
 	int *devInfo; // Device
-	int2* d_size;
 
 	// Host-Device paired
 	gpuMat<double> mu;
@@ -175,7 +174,7 @@ __global__ void DPointSample_kernel(double* D, int2* _size, int col, curandState
 
 	int row = blockIdx.x*blockDim.x + threadIdx.x;
 	D[col*Rows + row] = curand_normal(&d_localstates[row]);
-	printf("%d, %f\n", row, D[col*Rows + row]);
+	//printf("[%d]: %f\n", col*Rows + row, D[col*Rows + row]);
 }
 
 /*
@@ -218,6 +217,15 @@ __global__ void DSetMean_kernel(double* D, double* muD, int2* _size, int col)
 	D[col*Rows + row] = D[col*Rows + row] + muD[row];
 }
 
+__global__ void MakeIdentity(double* D, int2 *size)
+{
+	int Rows = size->y;
+	int Cols = size->x;
+	int col = blockIdx.x*blockDim.x + threadIdx.x;
+	int row = blockIdx.y*blockDim.y + threadIdx.y;
+
+	D[col*Rows + row] = (row == col) ? 1 : 0;
+}
 /*
 Calculate value of N from imsize, patchsize & imcount
 */
@@ -231,11 +239,6 @@ void InitSolverKit_evd(_cusolverStruct &solverKit, gpuMat<double> &D)
 	int Rows = D.rows;
 	solverKit.eigenVals.create(D.rows, 1);
 	solverKit.L.create(D.rows, D.rows);
-
-	// Initialize d_size
-	int2 h_size{ D.rows, D.cols };
-	cudaMalloc(&solverKit.d_size, sizeof(int2));
-	cudaMemcpy(solverKit.d_size, &h_size, sizeof(int2), cudaMemcpyHostToDevice);
 
 	// Initialize covariance matrix to I
 	solverKit.covar.create(D.rows, D.rows);
@@ -421,15 +424,22 @@ void DLLayer::Init()
 
 	// Sample columns of D
 	cout << "** SAMPLING COLUMNS of D **" << endl;
+	// Need only a M or K state variables - sampling rows of D in parallel
+	const int L = std::min(M, 32);
+	dim3 threadsPerBlock(L, L);
+	uint nbx = (unsigned int)ceil((double)M / L);
+	dim3 numBlocks(nbx, nbx);
+
+	START_METER
 	for (int k = 0; k < K; k++)
 	{
 		mvnrnd_d(D, solverKitD, k);
-		solverKitD.covar.copy2Device();
-		if (k==2)
-			break;
+		MakeIdentity<<<numBlocks, threadsPerBlock>>>(solverKitD.covar.d_elems, solverKitD.covar.d_size);
+		/*solverKitD.covar.copy2Host();
+		solverKitD.covar.print();*/
 	}
-	D.ToFile("outputs/d.csv");		
-	
+	STOP_METER
+	D.ToFile("outputs/d.csv");
 }
 
 void DLLayer::reflect()
@@ -449,17 +459,17 @@ void DLLayer::mvnrnd_d(gpuMat<double> &holder, _cusolverStruct &solverKit, int c
 	dim3 numBlocks((unsigned int)ceil((double)Rows / L));
 	
 	// Launch DPointSample_kernel
-	DPointSample_kernel <<<numBlocks, threadsPerBlock>>> (holder.d_elems, solverKit.d_size, col, d_localstates);
+	DPointSample_kernel <<<numBlocks, threadsPerBlock>>> (holder.d_elems, holder.d_size , col, d_localstates);
 
 	// LLT Decomp of covar and find Ld	
 	// Takes most time - 21 ms for a single call
-	//LLT_d(solverKitD);
+	LLT_d(solverKitD);
 
 	// Apply covar transformation - Multiply with Ld 
 	// Taking SECOND MOST time
-	//DSetVar_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, solverKit.L.d_elems, solverKit.d_size, col);
+	DSetVar_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, solverKit.L.d_elems, holder.d_size, col);
 
 	// Add mu - Launch DSetMean_kernel
-	//DSetMean_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, solverKit.mu.d_elems, solverKit.d_size, col);
+	DSetMean_kernel<<<numBlocks, threadsPerBlock>>>(D.d_elems, solverKit.mu.d_elems, holder.d_size, col);
 }
 

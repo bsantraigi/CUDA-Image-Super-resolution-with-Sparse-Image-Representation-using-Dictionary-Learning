@@ -7,6 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cuMatPro_v1", "cuMatPro_v1\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cuMatPro_v1.1", "cuMatPro_v1.1\cuMatPro_v1.1.vcxproj", "{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cuSolver_testEVD", "cuSolver_testEVD\cuSolver_testEVD.vcxproj", "{B1E5F5B8-C785-4765-A7A2-F22719BF3B31}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cuSolver_testSVD", "cuSolver_testSVD\cuSolver_testSVD.vcxproj", "{70453351-EE48-42D7-8E84-DB73C5D076C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +35,22 @@ Global
 		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Release|Win32.Build.0 = Release|Win32
 		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Release|x64.ActiveCfg = Release|x64
 		{E4309BA4-1AA2-45C5-BC7C-569D6BFDF696}.Release|x64.Build.0 = Release|x64
+		{B1E5F5B8-C785-4765-A7A2-F22719BF3B31}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B1E5F5B8-C785-4765-A7A2-F22719BF3B31}.Debug|Win32.Build.0 = Debug|Win32
+		{B1E5F5B8-C785-4765-A7A2-F22719BF3B31}.Debug|x64.ActiveCfg = Debug|x64
+		{B1E5F5B8-C785-4765-A7A2-F22719BF3B31}.Debug|x64.Build.0 = Debug|x64
+		{B1E5F5B8-C785-4765-A7A2-F22719BF3B31}.Release|Win32.ActiveCfg = Release|Win32
+		{B1E5F5B8-C785-4765-A7A2-F22719BF3B31}.Release|Win32.Build.0 = Release|Win32
+		{B1E5F5B8-C785-4765-A7A2-F22719BF3B31}.Release|x64.ActiveCfg = Release|x64
+		{B1E5F5B8-C785-4765-A7A2-F22719BF3B31}.Release|x64.Build.0 = Release|x64
+		{70453351-EE48-42D7-8E84-DB73C5D076C1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{70453351-EE48-42D7-8E84-DB73C5D076C1}.Debug|Win32.Build.0 = Debug|Win32
+		{70453351-EE48-42D7-8E84-DB73C5D076C1}.Debug|x64.ActiveCfg = Debug|x64
+		{70453351-EE48-42D7-8E84-DB73C5D076C1}.Debug|x64.Build.0 = Debug|x64
+		{70453351-EE48-42D7-8E84-DB73C5D076C1}.Release|Win32.ActiveCfg = Release|Win32
+		{70453351-EE48-42D7-8E84-DB73C5D076C1}.Release|Win32.Build.0 = Release|Win32
+		{70453351-EE48-42D7-8E84-DB73C5D076C1}.Release|x64.ActiveCfg = Release|x64
+		{70453351-EE48-42D7-8E84-DB73C5D076C1}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

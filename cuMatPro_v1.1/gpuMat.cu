@@ -17,6 +17,7 @@ public:
 	T* h_elems = nullptr;
 	T* d_elems = nullptr;
 	int rows, cols;
+	int2 *d_size;
 
 	gpuMat();
 	gpuMat(int rows, int cols);
@@ -27,6 +28,8 @@ public:
 	void copy2Device();
 	void copy2Host();
 	void ToFile(string fileName);
+private:
+	void SetSize();
 };
 
 template <typename T>
@@ -36,21 +39,21 @@ gpuMat<T>::gpuMat()
 }
 
 template <typename T>
+void gpuMat<T>::SetSize()
+{
+	// Initialize d_size
+	int2 h_size;
+	h_size.x = cols;
+	h_size.y = rows;
+	cudaMalloc(&d_size, sizeof(int2));
+	cudaMemcpy(d_size, &h_size, sizeof(int2), cudaMemcpyHostToDevice);
+}
+template <typename T>
 gpuMat<T>::gpuMat(int rows, int cols)
 {
-	if (!blank){
-		delete[] h_elems;
-		cudaFree(d_elems);
-	}
-	blank = false;	
-	this->rows = rows;
-	this->cols = cols;
-	h_elems = new T[rows*cols];
-	cudaError_t err = cudaMalloc(&d_elems, rows*cols*sizeof(double));
-	if (err != cudaSuccess){
-		cout << "[gpuMat::ctor]Memory allocation on GPU failed." << endl;
-	}
+	create(rows, cols);
 }
+
 
 template <typename T>
 void gpuMat<T>::create(int rows, int cols)
@@ -67,6 +70,8 @@ void gpuMat<T>::create(int rows, int cols)
 	if (err != cudaSuccess){
 		cout << "[gpuMat::ctor]Memory allocation on GPU failed." << endl;
 	}
+
+	SetSize();
 }
 
 template <typename T>
@@ -80,7 +85,7 @@ gpuMat<T>::~gpuMat()
 	else{
 		cout << "[gpuMat::dtor] object was blank" << endl;
 	}
-
+	cudaFree(d_size);
 }
 
 template <typename T>
@@ -134,11 +139,13 @@ void gpuMat<T>::ToFile(string filename)
 {
 	this->copy2Host();
 	ofstream os(filename);
-	for (int i = 0; i < cols; i++)
+	for (int i = 0; i < rows; i++)
 	{
-		for (int j = 0; j < rows; j++)
+		for (int j = 0; j < cols; j++)
 		{
-			os << h_elems[i*rows + j] << ",";
+			os << (*this)(i, j) << ",";
+			//os << j*rows + i << ",";
+			//os << "[" << j*rows + i  << "]" << h_elems[j*rows + i] << ",";
 		}
 		os << endl;
 	}
