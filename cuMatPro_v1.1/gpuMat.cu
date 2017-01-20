@@ -138,16 +138,24 @@ template <typename T>
 void gpuMat<T>::ToFile(string filename)
 {
 	this->copy2Host();
-	ofstream os(filename);
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
+	FILE *fh;
+	fh = fopen(filename.c_str(), "w");
+	if (fh != NULL){
+		for (int i = 0; i < rows; i++)
 		{
-			os << (*this)(i, j) << ",";
-			//os << j*rows + i << ",";
-			//os << "[" << j*rows + i  << "]" << h_elems[j*rows + i] << ",";
+			for (int j = 0; j < cols; j++)
+			{
+				fprintf(fh, "%6.2f", (*this)(i, j));
+				//os << (*this)(i, j) << ",";
+				//os << j*rows + i << ",";
+				//os << "[" << j*rows + i  << "]" << h_elems[j*rows + i] << ",";
+			}
+			//os << endl;
+			fprintf(fh, "\n");
 		}
-		os << endl;
+		fclose(fh);
 	}
-	os.close();
+	else{
+		cout << filename << " failed to open..." << endl;
+	}
 }

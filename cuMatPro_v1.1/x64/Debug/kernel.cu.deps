@@ -429,6 +429,8 @@ D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xthrcommon.h
 d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_launch_parameters.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cuda_runtime_api.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\device_functions.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\curand_kernel.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include\cusolverDn.h

@@ -1,4 +1,4 @@
-﻿Build started 1/19/2017 12:27:42 AM.
+﻿Build started 1/20/2017 10:52:07 AM.
      1>Project "D:\Users\Bishal Santra\Documents\Visual Studio 2013\Projects\cuMatPro_v1\cuMatPro_v1.1\cuMatPro_v1.1.vcxproj" on node 2 (Build target(s)).
      1>AddCudaCompileDeps:
          D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /DWIN64 /D_DEBUG /D_CONSOLE /D_MBCS /ID:\ProgramData\opencv\build\include /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" /I. /FIcuda_runtime.h /c "D:\Users\Bishal Santra\Documents\Visual Studio 2013\Projects\cuMatPro_v1\cuMatPro_v1.1\kernel.cu" 
@@ -9,27 +9,27 @@
      1>CudaBuildCore:
          Compiling CUDA source file Random_kernels.cu...
      1>CudaBuildCore:
-         cmd.exe /C "D:\Users\Bishal Santra\AppData\Local\Temp\tmp072dd426350e40ef8de5984a2b28e74c.cmd"
+         cmd.exe /C "D:\Users\Bishal Santra\AppData\Local\Temp\tmp5b5d933a0e034908891b6b3e08994c04.cmd"
          "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "D:\Users\Bishal Santra\Documents\Visual Studio 2013\Projects\cuMatPro_v1\cuMatPro_v1.1\kernel.cu"
          
          D:\Users\Bishal Santra\Documents\Visual Studio 2013\Projects\cuMatPro_v1\cuMatPro_v1.1>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "D:\Users\Bishal Santra\Documents\Visual Studio 2013\Projects\cuMatPro_v1\cuMatPro_v1.1\kernel.cu" 
      1>CudaBuildCore:
-         cmd.exe /C "D:\Users\Bishal Santra\AppData\Local\Temp\tmpbff109a4e6fc47538489125e8604d747.cmd"
+         cmd.exe /C "D:\Users\Bishal Santra\AppData\Local\Temp\tmp4eaee911236444b08f371cd0a98c2989.cmd"
          "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\Random_kernels.cu.obj "D:\Users\Bishal Santra\Documents\Visual Studio 2013\Projects\cuMatPro_v1\cuMatPro_v1.1\Random_kernels.cu"
          
          D:\Users\Bishal Santra\Documents\Visual Studio 2013\Projects\cuMatPro_v1\cuMatPro_v1.1>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin\nvcc.exe" -gencode=arch=compute_50,code=\"sm_50,compute_50\" --use-local-env --cl-version 2013 -ccbin "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -ID:\ProgramData\opencv\build\include -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -lcublas -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o x64\Debug\Random_kernels.cu.obj "D:\Users\Bishal Santra\Documents\Visual Studio 2013\Projects\cuMatPro_v1\cuMatPro_v1.1\Random_kernels.cu" 
      1>D:\ProgramData\opencv\build\include\opencv2/core/base.hpp(363): warning : function declared with "noreturn" does return
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(173): warning : variable "Cols" was declared but never referenced
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(214): warning : variable "Cols" was declared but never referenced
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(223): warning : variable "Cols" was declared but never referenced
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(453): warning : variable "covar" was declared but never referenced
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(455): warning : variable "Cols" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(176): warning : variable "Cols" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(194): warning : variable "DCols" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(221): warning : variable "Cols" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(495): warning : variable "covar" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(497): warning : variable "Cols" was declared but never referenced
      1>D:\ProgramData\opencv\build\include\opencv2/core/base.hpp(363): warning : function declared with "noreturn" does return
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(173): warning : variable "Cols" was declared but never referenced
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(214): warning : variable "Cols" was declared but never referenced
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(223): warning : variable "Cols" was declared but never referenced
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(453): warning : variable "covar" was declared but never referenced
-     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(455): warning : variable "Cols" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(176): warning : variable "Cols" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(194): warning : variable "DCols" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(221): warning : variable "Cols" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(495): warning : variable "covar" was declared but never referenced
+     1>d:\users\bishal santra\documents\visual studio 2013\projects\cumatpro_v1\cumatpro_v1.1\DLLayer.cu(497): warning : variable "Cols" was declared but never referenced
        CudaBuildCore:
          Random_kernels.cu
      1>Done Building Project "D:\Users\Bishal Santra\Documents\Visual Studio 2013\Projects\cuMatPro_v1\cuMatPro_v1.1\cuMatPro_v1.1.vcxproj" (CudaBuildCore target(s)).
@@ -67,4 +67,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:08.93
+Time Elapsed 00:00:08.96
